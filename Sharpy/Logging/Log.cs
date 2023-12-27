@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Sharpy.Core
+namespace Sharpy.Logging
 {
     /// <summary>
     /// Sharpy logger class
@@ -20,13 +21,30 @@ namespace Sharpy.Core
         /// <summary>
         /// Enum containing all availabble log levels
         /// </summary>
-        private enum LogLevel
+        public enum LogLevel
         {
             DEBUG,
             INFO, 
             WARN,
             ERROR,
             FATAL
+        }
+
+        private static object oLock = new object();
+        private static int m_nBufferPos = 0;
+        private static int m_nCurrentBuffer = 0;
+        private static LogEntry?[][] m_rglogeEntriesBuffer = new LogEntry?[2][];
+
+        #endregion
+
+
+        #region Constructors
+
+        static Log()
+        {
+            m_rglogeEntriesBuffer[0] = new LogEntry?[100];
+            m_rglogeEntriesBuffer[1] = new LogEntry?[100];
+            Timer tmrLog = new Timer(OnTimerEvent, null, 100, 100);
         }
 
         #endregion
@@ -117,19 +135,50 @@ namespace Sharpy.Core
         /// <param name="t_rgobjArgs">ARguments to use in message</param>
         private static void WriteToLog(LogLevel t_logLevel, string t_sMessage, params object[] t_rgobjArgs)
         {
-            ConsoleColor colrOutput = Console.ForegroundColor;
-            switch(t_logLevel)
+            lock (oLock)
             {
-                case LogLevel.ERROR: colrOutput = ConsoleColor.Red; break;
-                case LogLevel.FATAL: colrOutput = ConsoleColor.DarkMagenta; break;
-                case LogLevel.INFO: colrOutput = (colrOutput == ConsoleColor.Green) ? ConsoleColor.Gray : ConsoleColor.Green; break;
-                case LogLevel.WARN: colrOutput = ConsoleColor.Yellow; break;
+                m_rglogeEntriesBuffer[m_nCurrentBuffer][m_nBufferPos] = new LogEntry(t_logLevel, string.Format(t_sMessage, t_rgobjArgs));
+                m_nBufferPos++;
             }
-            ConsoleColor colrPrev = Console.ForegroundColor;
-            Console.ForegroundColor = colrOutput;
-            Console.WriteLine($"{t_logLevel}: {t_sMessage}", t_rgobjArgs);
-            Console.ForegroundColor = colrPrev;
+
         }
+
+        /// <summary>
+        /// Timer callback. Does actual logging
+        /// </summary>
+        /// <param name="t_oState">State of timer. Is just null</param>
+        private static void OnTimerEvent(object? t_oState)
+        {
+            int nBuffer = 0;
+            // swap buffers
+            lock(oLock)
+            {
+                nBuffer = m_nCurrentBuffer;
+                m_nCurrentBuffer = (m_nCurrentBuffer + 1) % 2;
+                m_nBufferPos = 0;
+            }
+            foreach(LogEntry? logeEntry in m_rglogeEntriesBuffer[nBuffer])
+            {
+                if (logeEntry == null)
+                {
+                    break;
+                }
+                ConsoleColor colrOutput = Console.ForegroundColor;
+                switch (logeEntry.Value.m_logLevel)
+                {
+                    case LogLevel.ERROR: colrOutput = ConsoleColor.Red; break;
+                    case LogLevel.FATAL: colrOutput = ConsoleColor.DarkMagenta; break;
+                    case LogLevel.INFO: colrOutput = (colrOutput == ConsoleColor.Green) ? ConsoleColor.Gray : ConsoleColor.Green; break;
+                    case LogLevel.WARN: colrOutput = ConsoleColor.Yellow; break;
+                }
+                ConsoleColor colrPrev = Console.ForegroundColor;
+                Console.ForegroundColor = colrOutput;
+                Console.WriteLine($"{logeEntry.Value.m_logLevel}: {logeEntry.Value.m_sMessage}");
+                Console.ForegroundColor = colrPrev;
+            }
+            Array.Clear(m_rglogeEntriesBuffer[nBuffer]);
+        }
+
 
         #endregion
 
