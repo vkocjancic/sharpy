@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,9 +32,7 @@ namespace Sharpy.Logging
         }
 
         private static object oLock = new object();
-        private static int m_nBufferPos = 0;
-        private static int m_nCurrentBuffer = 0;
-        private static LogEntry?[][] m_rglogeEntriesBuffer = new LogEntry?[2][];
+        private static ConcurrentQueue<LogEntry> m_qlogeEntriesBuffer = new ConcurrentQueue<LogEntry>();
 
         #endregion
 
@@ -42,8 +41,6 @@ namespace Sharpy.Logging
 
         static Log()
         {
-            m_rglogeEntriesBuffer[0] = new LogEntry?[100];
-            m_rglogeEntriesBuffer[1] = new LogEntry?[100];
             Timer tmrLog = new Timer(OnTimerEvent, null, 100, 100);
         }
 
@@ -137,8 +134,7 @@ namespace Sharpy.Logging
         {
             lock (oLock)
             {
-                m_rglogeEntriesBuffer[m_nCurrentBuffer][m_nBufferPos] = new LogEntry(t_logLevel, string.Format(t_sMessage, t_rgobjArgs));
-                m_nBufferPos++;
+                m_qlogeEntriesBuffer.Enqueue(new LogEntry(t_logLevel, string.Format(t_sMessage, t_rgobjArgs)));
             }
 
         }
@@ -149,22 +145,11 @@ namespace Sharpy.Logging
         /// <param name="t_oState">State of timer. Is just null</param>
         private static void OnTimerEvent(object? t_oState)
         {
-            int nBuffer = 0;
-            // swap buffers
-            lock(oLock)
+            LogEntry logeEntry;
+            while(m_qlogeEntriesBuffer.TryDequeue(out logeEntry))
             {
-                nBuffer = m_nCurrentBuffer;
-                m_nCurrentBuffer = (m_nCurrentBuffer + 1) % 2;
-                m_nBufferPos = 0;
-            }
-            foreach(LogEntry? logeEntry in m_rglogeEntriesBuffer[nBuffer])
-            {
-                if (logeEntry == null)
-                {
-                    break;
-                }
                 ConsoleColor colrOutput = Console.ForegroundColor;
-                switch (logeEntry.Value.m_logLevel)
+                switch (logeEntry.m_logLevel)
                 {
                     case LogLevel.ERROR: colrOutput = ConsoleColor.Red; break;
                     case LogLevel.FATAL: colrOutput = ConsoleColor.DarkMagenta; break;
@@ -173,10 +158,9 @@ namespace Sharpy.Logging
                 }
                 ConsoleColor colrPrev = Console.ForegroundColor;
                 Console.ForegroundColor = colrOutput;
-                Console.WriteLine($"{logeEntry.Value.m_logLevel}: {logeEntry.Value.m_sMessage}");
+                Console.WriteLine($"{logeEntry.m_logLevel}: {logeEntry.m_sMessage}");
                 Console.ForegroundColor = colrPrev;
             }
-            Array.Clear(m_rglogeEntriesBuffer[nBuffer]);
         }
 
 
