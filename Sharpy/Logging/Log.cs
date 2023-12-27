@@ -41,7 +41,9 @@ namespace Sharpy.Logging
 
         static Log()
         {
+#if DEBUG
             Timer tmrLog = new Timer(OnTimerEvent, null, 100, 100);
+#endif
         }
 
         #endregion
@@ -132,11 +134,12 @@ namespace Sharpy.Logging
         /// <param name="t_rgobjArgs">ARguments to use in message</param>
         private static void WriteToLog(LogLevel t_logLevel, string t_sMessage, params object[] t_rgobjArgs)
         {
+#if DEBUG
             lock (oLock)
             {
                 m_qlogeEntriesBuffer.Enqueue(new LogEntry(t_logLevel, string.Format(t_sMessage, t_rgobjArgs)));
             }
-
+#endif
         }
 
         /// <summary>
