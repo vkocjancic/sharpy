@@ -1,4 +1,6 @@
 ﻿
+using Sharpy.Core;
+
 namespace Sharpy.EntryPoint
 {
     /// <summary>
@@ -14,7 +16,16 @@ namespace Sharpy.EntryPoint
         /// </summary>
         public void Run()
         {
-            Console.WriteLine("Hellow from Sharpy app");
+            // TODO: remove at next implementation
+            Log.Debug("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
+            Log.Info("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
+            Log.Warn("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
+            Log.Error("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
+            Log.Error("Sharpy application error", new ApplicationException("Foo bar"));
+            Log.Fatal("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
+            Log.Fatal("Sharpy application critical error", new ApplicationException("Foo bar"));
+            
+            // TODO: add game loop
         }
 
         #endregion
