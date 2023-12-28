@@ -24,9 +24,9 @@ namespace Sharpy.EntryPoint
             Log.Error("Sharpy application error", new ApplicationException("Foo bar"));
             Log.Fatal("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
             Log.Fatal("Sharpy application critical error", new ApplicationException("Foo bar"));
-            Thread.Sleep(200);
 
             // TODO: add game loop
+            while (true) ;
         }
 
         #endregion

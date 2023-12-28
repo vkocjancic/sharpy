@@ -31,7 +31,6 @@ namespace Sharpy.Logging
             FATAL
         }
 
-        private static object oLock = new object();
         private static ConcurrentQueue<LogEntry> m_qlogeEntriesBuffer = new ConcurrentQueue<LogEntry>();
 
         #endregion
@@ -135,10 +134,7 @@ namespace Sharpy.Logging
         private static void WriteToLog(LogLevel t_logLevel, string t_sMessage, params object[] t_rgobjArgs)
         {
 #if DEBUG
-            lock (oLock)
-            {
-                m_qlogeEntriesBuffer.Enqueue(new LogEntry(t_logLevel, string.Format(t_sMessage, t_rgobjArgs)));
-            }
+            m_qlogeEntriesBuffer.Enqueue(new LogEntry(t_logLevel, string.Format(t_sMessage, t_rgobjArgs)));
 #endif
         }
 

@@ -29,6 +29,11 @@ namespace Sharpy.Logging
 
         #region Constructors
 
+        /// <summary>
+        /// Constructor for LogEntry
+        /// </summary>
+        /// <param name="t_level">Log level</param>
+        /// <param name="t_sMessage">Log message</param>
         public LogEntry(Log.LogLevel t_level, string t_sMessage)
         {
             m_logLevel = t_level;
