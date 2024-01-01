@@ -7,30 +7,89 @@ using System.Threading.Tasks;
 
 namespace Sharpy.Events
 {
+    /// <summary>
+    /// Class used to dispatch all in-game IO events
+    /// </summary>
     public class EventDispatcher
     {
 
         #region Events
 
+        /// <summary>
+        /// Handle key pressed event delegate
+        /// </summary>
+        /// <param name="sender">Object that triggered this event</param>
+        /// <param name="e">Event arguments</param>
         public delegate void KeyPressedEventHandler(object sender, KeyPressedEventArgs e);
+        /// <summary>
+        /// Key pressed event
+        /// </summary>
         public event KeyPressedEventHandler? KeyPressed;
 
+        /// <summary>
+        /// Handle key released event delegate
+        /// </summary>
+        /// <param name="sender">Object that triggered this event</param>
+        /// <param name="e">Event arguments</param>
         public delegate void KeyReleasedEventHandler(object sender, KeyReleasedEventArgs e);
+        /// <summary>
+        /// Key released event
+        /// </summary>
         public event KeyReleasedEventHandler? KeyReleased;
 
+        /// <summary>
+        /// Handle mouse button pressed event delegate
+        /// </summary>
+        /// <param name="sender">Object that triggered this event</param>
+        /// <param name="e">Event arguments</param>
         public delegate void MouseButtonPressedEventHandler(object sender, MouseButtonPressedEventArgs e);
+        /// <summary>
+        /// Mouse button pressed event
+        /// </summary>
         public event MouseButtonPressedEventHandler? MouseButtonPressed;
 
+        /// <summary>
+        /// Handle mouse button released event delegate
+        /// </summary>
+        /// <param name="sender">Object that triggered this event</param>
+        /// <param name="e">Event arguments</param>
         public delegate void MouseButtonReleasedEventHandler(object sender, MouseButtonReleasedEventArgs e);
+        /// <summary>
+        /// Mouse button released event
+        /// </summary>
         public event MouseButtonReleasedEventHandler? MouseButtonReleased;
 
+        /// <summary>
+        /// Handle mouse moved event delegate
+        /// </summary>
+        /// <param name="sender">Object that triggered this event</param>
+        /// <param name="e">Event arguments</param>
         public delegate void MouseMovedEventHandler(object sender, MouseMovedEventArgs e);
+        /// <summary>
+        /// Mouse moved event
+        /// </summary>
         public event MouseMovedEventHandler? MouseMoved;
 
+        /// <summary>
+        /// Handle mouse scrolled event delegate
+        /// </summary>
+        /// <param name="sender">Object that triggered this event</param>
+        /// <param name="e">Event arguments</param>
         public delegate void MouseScrolledEventHandler(object sender, MouseScrolledEventArgs e);
+        /// <summary>
+        /// Mouse scrolled event
+        /// </summary>
         public event MouseScrolledEventHandler? MouseScrolled;
 
+        /// <summary>
+        /// Handle window resize event delegate
+        /// </summary>
+        /// <param name="sender">Object that triggered this event</param>
+        /// <param name="e">Event arguments</param>
         public delegate void WindowResizeEventHandler(object sender, WindowResizeEventArgs e);
+        /// <summary>
+        /// Window resize event
+        /// </summary>
         public event WindowResizeEventHandler? WindowResize;
 
         #endregion
@@ -38,6 +97,11 @@ namespace Sharpy.Events
 
         #region Abstract methods
 
+        /// <summary>
+        /// Dispatch event
+        /// </summary>
+        /// <param name="sender">Object that triggered event</param>
+        /// <param name="e">Event arguments</param>
         public void Dispatch(object sender, EventArgsBase e)
         {
             switch (e)
