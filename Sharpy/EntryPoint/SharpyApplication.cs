@@ -1,4 +1,5 @@
 ﻿
+using Sharpy.Events;
 using Sharpy.Logging;
 
 namespace Sharpy.EntryPoint
@@ -9,6 +10,23 @@ namespace Sharpy.EntryPoint
     public class SharpyApplication
     {
 
+        #region Properties
+
+        public EventDispatcher EventDispatcher { get; set; }
+
+        #endregion
+
+
+        #region Constructors
+
+        public SharpyApplication() 
+        {
+            EventDispatcher = new EventDispatcher();
+        }
+
+        #endregion
+
+
         #region Public methods
 
         /// <summary>
@@ -17,13 +35,11 @@ namespace Sharpy.EntryPoint
         public void Run()
         {
             // TODO: remove at next implementation
-            Log.Debug("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
-            Log.Info("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
-            Log.Warn("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
-            Log.Error("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
-            Log.Error("Sharpy application error", new ApplicationException("Foo bar"));
-            Log.Fatal("Sharpy application started at {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
-            Log.Fatal("Sharpy application critical error", new ApplicationException("Foo bar"));
+            KeyPressedEventArgs eKp = new KeyPressedEventArgs() { KeyCode = 101, NumberOfRepeats = 1 };
+            WindowResizeEventArgs eWr = new WindowResizeEventArgs() { WindowHeight = 1024, WindowWidth = 768 };
+
+            EventDispatcher.Dispatch(this, eKp);
+            EventDispatcher.Dispatch(this, eWr);
 
             // TODO: add game loop
             while (true) ;
