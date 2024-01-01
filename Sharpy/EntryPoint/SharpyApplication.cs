@@ -12,13 +12,19 @@ namespace Sharpy.EntryPoint
 
         #region Properties
 
-        public EventDispatcher EventDispatcher { get; set; }
+        /// <summary>
+        /// Event dispatcher
+        /// </summary>
+        public EventDispatcher EventDispatcher { get; protected set; }
 
         #endregion
 
 
         #region Constructors
 
+        /// <summary>
+        /// Constructors
+        /// </summary>
         public SharpyApplication() 
         {
             EventDispatcher = new EventDispatcher();
