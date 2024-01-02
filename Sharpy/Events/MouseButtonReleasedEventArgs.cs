@@ -32,7 +32,7 @@ namespace Sharpy.Events
         /// <remarks>For debugging purposes only!</remarks>
         public override string ToString()
         {
-            return $"buttonCode = {ButtonCode}";
+            return $"Mouse button released: buttonCode = {ButtonCode}";
         }
 
         #endregion

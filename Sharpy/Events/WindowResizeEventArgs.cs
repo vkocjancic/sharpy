@@ -37,7 +37,7 @@ namespace Sharpy.Events
         /// <remarks>For debugging purposes only!</remarks>
         public override string ToString()
         {
-            return $"width = {WindowWidth}; height = {WindowHeight}";
+            return $"Window resized: width = {WindowWidth}; height = {WindowHeight}";
         }
 
         #endregion

@@ -42,7 +42,7 @@ namespace Sharpy.EntryPoint
         {
             // TODO: remove at next implementation
             KeyPressedEventArgs eKp = new KeyPressedEventArgs() { KeyCode = 101, NumberOfRepeats = 1 };
-            WindowResizeEventArgs eWr = new WindowResizeEventArgs() { WindowHeight = 1024, WindowWidth = 768 };
+            WindowResizeEventArgs eWr = new WindowResizeEventArgs() { WindowHeight = 768, WindowWidth = 1024 };
 
             EventDispatcher.Dispatch(this, eKp);
             EventDispatcher.Dispatch(this, eWr);

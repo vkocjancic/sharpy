@@ -104,34 +104,28 @@ namespace Sharpy.Events
         /// <param name="e">Event arguments</param>
         public void Dispatch(object sender, EventArgsBase e)
         {
+            Log.Debug("{0}", e);
             switch (e)
             {
                 case KeyPressedEventArgs args:
-                    Log.Debug("Key pressed: {0}", args);
                     KeyPressed?.Invoke(sender, args);
                     break;
                 case KeyReleasedEventArgs args:
-                    Log.Debug("Key released: {0}", args);
                     KeyReleased?.Invoke(sender, args);
                     break;
                 case MouseButtonPressedEventArgs args:
-                    Log.Debug("Mouse button pressed: {0}", args);
                     MouseButtonPressed?.Invoke(sender, args);
                     break;
                 case MouseButtonReleasedEventArgs args:
-                    Log.Debug("Mouse button released: {0}", args);
                     MouseButtonReleased?.Invoke(sender, args);
                     break;
                 case MouseMovedEventArgs args:
-                    Log.Debug("Mouse moved: {0}", args);
                     MouseMoved?.Invoke(sender, args);
                     break;
                 case MouseScrolledEventArgs args:
-                    Log.Debug("Mouse scrolled: {0}", args);
                     MouseScrolled?.Invoke(sender, args);
                     break;
                 case WindowResizeEventArgs args:
-                    Log.Debug("Window resized: {0}", args);
                     WindowResize?.Invoke(sender, args);
                     break;
             }

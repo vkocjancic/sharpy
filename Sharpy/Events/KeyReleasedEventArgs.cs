@@ -32,7 +32,7 @@ namespace Sharpy.Events
         /// <remarks>For debugging purposes only!</remarks>
         public override string ToString()
         {
-            return $"keyCode = {KeyCode}";
+            return $"Key released: keyCode = {KeyCode}";
         }
 
         #endregion

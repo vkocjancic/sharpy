@@ -37,7 +37,7 @@ namespace Sharpy.Events
         /// <remarks>For debugging purposes only!</remarks>
         public override string ToString()
         {
-            return $"x = {PositionX}; y = {PositionY}";
+            return $"Mouse moved: x = {PositionX}; y = {PositionY}";
         }
 
         #endregion

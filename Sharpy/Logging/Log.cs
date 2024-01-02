@@ -157,7 +157,7 @@ namespace Sharpy.Logging
                 }
                 ConsoleColor colrPrev = Console.ForegroundColor;
                 Console.ForegroundColor = colrOutput;
-                Console.WriteLine($"{logeEntry.m_logLevel}: {logeEntry.m_sMessage}");
+                Console.WriteLine($"[{logeEntry.m_logLevel}] {logeEntry.m_sMessage}");
                 Console.ForegroundColor = colrPrev;
             }
         }

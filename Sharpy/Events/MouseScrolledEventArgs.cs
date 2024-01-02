@@ -37,7 +37,7 @@ namespace Sharpy.Events
         /// <remarks>For debugging purposes only!</remarks>
         public override string ToString()
         {
-            return $"offX = {OffsetX}; offY = {OffsetY}";
+            return $"Mouse scrolled: offX = {OffsetX}; offY = {OffsetY}";
         }
 
         #endregion

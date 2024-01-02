@@ -36,7 +36,7 @@ namespace Sharpy.Events
         /// <remarks>For debugging purposes only!</remarks>
         public override string ToString()
         {
-            return $"keyCode = {KeyCode}; numberOfRepeats = {NumberOfRepeats}";
+            return $"Key pressed: keyCode = {KeyCode}; numberOfRepeats = {NumberOfRepeats}";
         }
 
         #endregion
