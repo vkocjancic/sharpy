@@ -16,4 +16,8 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Silk.NET" Version="2.20.0" />
+  </ItemGroup>
+
 </Project>
