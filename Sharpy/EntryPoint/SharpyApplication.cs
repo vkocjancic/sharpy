@@ -1,6 +1,7 @@
 ﻿
 using Sharpy.Events;
 using Sharpy.Logging;
+using Sharpy.Window;
 
 namespace Sharpy.EntryPoint
 {
@@ -40,15 +41,15 @@ namespace Sharpy.EntryPoint
         /// </summary>
         public void Run()
         {
-            // TODO: remove at next implementation
-            KeyPressedEventArgs eKp = new KeyPressedEventArgs() { KeyCode = 101, NumberOfRepeats = 1 };
-            WindowResizeEventArgs eWr = new WindowResizeEventArgs() { WindowHeight = 768, WindowWidth = 1024 };
-
-            EventDispatcher.Dispatch(this, eKp);
-            EventDispatcher.Dispatch(this, eWr);
-
-            // TODO: add game loop
-            while (true) ;
+            var options = new WindowOptions()
+            {
+                m_bVsyncEnabled = true,
+                m_sTitle = "Sharpy application",
+                m_unHeight = 600,
+                m_unWidth = 800
+            };
+            var window = new WindowsWindow(options, EventDispatcher);
+            window.Run();
         }
 
         #endregion
