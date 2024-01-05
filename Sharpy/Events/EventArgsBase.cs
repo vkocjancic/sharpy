@@ -12,6 +12,13 @@ namespace Sharpy.Events
     /// </summary>
     public abstract class EventArgsBase : System.EventArgs
     {
+
+        #region Properties
+
+        public bool IsHandled { get; set; } = false;
+
+        #endregion
+
     }
 
 }

@@ -16,7 +16,7 @@ namespace Sharpy.EntryPoint
         /// <summary>
         /// Event dispatcher
         /// </summary>
-        public EventDispatcher EventDispatcher { get; protected set; }
+        protected EventDispatcher EventDispatcher { get; set; }
 
         #endregion
 
@@ -29,6 +29,7 @@ namespace Sharpy.EntryPoint
         public SharpyApplication() 
         {
             EventDispatcher = new EventDispatcher();
+            EventDispatcher.Event += OnEventDispatcherEvent;
         }
 
         #endregion
@@ -50,6 +51,16 @@ namespace Sharpy.EntryPoint
             };
             var window = new WindowsWindow(options, EventDispatcher);
             window.Run();
+        }
+
+        #endregion
+
+
+        #region EventDispatcher events
+
+        private void OnEventDispatcherEvent(object t_oSender, EventArgsBase t_evtArgs)
+        {
+            Log.Debug("{0}", t_evtArgs);
         }
 
         #endregion
