@@ -1,5 +1,6 @@
 ﻿
 using Sharpy.Events;
+using Sharpy.Layers;
 using Sharpy.Logging;
 using Sharpy.Window;
 
@@ -11,12 +12,17 @@ namespace Sharpy.EntryPoint
     public class SharpyApplication
     {
 
-        #region Properties
+        #region Fields
 
         /// <summary>
         /// Event dispatcher
         /// </summary>
-        protected EventDispatcher EventDispatcher { get; set; }
+        protected EventDispatcher m_evtDispatcher;
+
+        /// <summary>
+        /// Layer stack
+        /// </summary>
+        public LayerStack m_stackLayers;
 
         #endregion
 
@@ -28,14 +34,16 @@ namespace Sharpy.EntryPoint
         /// </summary>
         public SharpyApplication() 
         {
-            EventDispatcher = new EventDispatcher();
-            EventDispatcher.Event += OnEventDispatcherEvent;
+            m_stackLayers = new LayerStack();
+
+            m_evtDispatcher = new EventDispatcher();
+            m_evtDispatcher.Event += OnEventDispatcherEvent;
         }
 
         #endregion
 
 
-        #region Public methods
+        #region Public members
 
         /// <summary>
         /// Main function with game loop.
@@ -49,7 +57,7 @@ namespace Sharpy.EntryPoint
                 m_unHeight = 600,
                 m_unWidth = 800
             };
-            var window = new WindowsWindow(options, EventDispatcher);
+            var window = new WindowsWindow(options, m_evtDispatcher);
             window.Run();
         }
 
@@ -58,9 +66,22 @@ namespace Sharpy.EntryPoint
 
         #region EventDispatcher events
 
+        /// <summary>
+        /// Handles event from EventDispatcher
+        /// </summary>
+        /// <param name="t_oSender">Event owner</param>
+        /// <param name="t_evtArgs">Event details</param>
         private void OnEventDispatcherEvent(object t_oSender, EventArgsBase t_evtArgs)
         {
             Log.Debug("{0}", t_evtArgs);
+            for (int i = m_stackLayers.Count() - 1; i >= 0; i--)
+            {
+                m_stackLayers[i].OnEvent(t_evtArgs);
+                if (t_evtArgs.IsHandled)
+                {
+                    break;
+                }
+            }
         }
 
         #endregion

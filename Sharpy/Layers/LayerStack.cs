@@ -11,9 +11,13 @@ namespace Sharpy.Layers
 {
 
     /// <summary>
-    /// STack for storing all layers used by the engine
+    /// Stack for storing all layers used by the engine
     /// </summary>
-    internal class LayerStack : IEnumerable<LayerBase>
+    /// <remarks>
+    /// The stack takes care of overlays being allways at the end of the stack. Becaus eoverlays need to be at the end.
+    /// Normal layers are inserted mid stack.
+    /// </remarks>
+    public class LayerStack : IEnumerable<LayerBase>
     {
 
         #region Fields

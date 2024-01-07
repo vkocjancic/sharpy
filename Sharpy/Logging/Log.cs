@@ -14,7 +14,7 @@ namespace Sharpy.Logging
     /// <remarks>
     /// Why? Because nuget is a bitch
     /// </remarks>
-    internal static class Log
+    public static class Log
     {
 
         #region Declarations
