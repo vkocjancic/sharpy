@@ -17,17 +17,17 @@ namespace Sandbox.Layers
 
         public override void OnEvent(EventArgsBase t_evtArgs)
         {
-            Log.Debug("APP: {0}", t_evtArgs);
+            Log.Info("APP: {0}", t_evtArgs);
         }
 
-        public override void OnRender()
+        public override void OnRender(double t_fElapsedTime)
         {
-            throw new NotImplementedException();
+            Log.Debug("APP: Render {0} ms", t_fElapsedTime);
         }
 
-        public override void OnUpdate()
+        public override void OnUpdate(double t_fElapsedTime)
         {
-            throw new NotImplementedException();
+            Log.Debug("APP: Update {0} ms", t_fElapsedTime);
         }
 
         #endregion

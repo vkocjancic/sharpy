@@ -20,6 +20,15 @@ namespace Sharpy.Window
     public class WindowsWindow : WindowBase
     {
 
+        #region Events
+
+        public event Action<double>? Render;
+
+        public event Action<double>? Update;
+
+        #endregion
+
+
         #region Fields
 
         /// <summary>
@@ -44,8 +53,11 @@ namespace Sharpy.Window
             options.Title = m_optWindow.m_sTitle;
             options.VSync = m_optWindow.m_bVsyncEnabled;
             m_windowSilk = Silk.NET.Windowing.Window.Create(options);
+            m_windowSilk.Closing += OnSilkWindowClosing;
             m_windowSilk.Load += OnSilkWindowLoad;
             m_windowSilk.Resize += OnSilkWindowResize;
+            m_windowSilk.Render += OnSilkWindowRender;
+            m_windowSilk.Update += OnSilkWindowUpdate;
         }
 
         #endregion
@@ -64,6 +76,14 @@ namespace Sharpy.Window
 
 
         #region Silk window event handlers
+
+        /// <summary>
+        /// OnClosing event handler for Silk.NET window
+        /// </summary>
+        private void OnSilkWindowClosing()
+        {
+            m_evtDispatcher.Dispatch(this, new WindowClosingEventArgs());
+        }
 
         /// <summary>
         /// OnLoad event handler for Silk.NET window
@@ -108,12 +128,30 @@ namespace Sharpy.Window
         }
 
         /// <summary>
+        /// OnRender event handler for Silk.NET window
+        /// </summary>
+        /// <param name="t_fElapsedTime">Elapsed time in ms</param>
+        private void OnSilkWindowRender(double t_fElapsedTime)
+        {
+            Render?.Invoke(t_fElapsedTime);
+        }
+
+        /// <summary>
         /// OnResize event handler for Silk.NET window
         /// </summary>
         /// <param name="t_vec2dSize">Window size</param>
         private void OnSilkWindowResize(Vector2D<int> t_vec2dSize)
         {
             m_evtDispatcher.Dispatch(this, new WindowResizeEventArgs() { WindowHeight = t_vec2dSize.Y, WindowWidth = t_vec2dSize.X });
+        }
+
+        /// <summary>
+        /// OnRender event handler for Silk.NET window
+        /// </summary>
+        /// <param name="t_fElapsedTime">Elapsed time in ms</param>
+        private void OnSilkWindowUpdate(double t_fElapsedTime)
+        {
+            Update?.Invoke(t_fElapsedTime);
         }
 
         #endregion

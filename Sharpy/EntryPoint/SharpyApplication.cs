@@ -58,6 +58,8 @@ namespace Sharpy.EntryPoint
                 m_unWidth = 800
             };
             var window = new WindowsWindow(options, m_evtDispatcher);
+            window.Render += OnWindowRender;
+            window.Update += OnWindowUpdate;
             window.Run();
         }
 
@@ -83,6 +85,27 @@ namespace Sharpy.EntryPoint
                 }
             }
         }
+
+        #endregion
+
+
+        #region Window events
+
+        private void OnWindowRender(double t_fElapsedTime)
+        {
+            for (int i = 0; i < m_stackLayers.Count(); i++)
+            {
+                m_stackLayers[i].OnRender(t_fElapsedTime);
+            }
+        }
+
+        private void OnWindowUpdate(double t_fElapsedTime)
+        {
+            for (int i = 0; i < m_stackLayers.Count(); i++)
+            {
+                m_stackLayers[i].OnRender(t_fElapsedTime);
+            }
+        }      
 
         #endregion
 

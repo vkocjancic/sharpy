@@ -40,12 +40,14 @@ namespace Sharpy.Layers
         /// <summary>
         /// Updates layer
         /// </summary>
-        public abstract void OnUpdate();
+        /// <param name="t_fElapsedTime">Elapsed time in miliseconds</param>
+        public abstract void OnUpdate(double t_fElapsedTime);
 
         /// <summary>
         /// Renders layer
         /// </summary>
-        public abstract void OnRender();
+        /// <param name="t_fElapsedTime">Elapsed time in miliseconds</param>
+        public abstract void OnRender(double t_fElapsedTIme);
 
         #endregion
 
