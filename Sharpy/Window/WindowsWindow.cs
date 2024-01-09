@@ -2,6 +2,7 @@
 using Sharpy.Logging;
 using Silk.NET.Input;
 using Silk.NET.Maths;
+using Silk.NET.OpenGL;
 using Silk.NET.SDL;
 using Silk.NET.Windowing;
 using System;
@@ -35,6 +36,8 @@ namespace Sharpy.Window
         /// Silk.NET window instance
         /// </summary>
         private IWindow m_windowSilk;
+
+        private static GL? m_gl = null;
 
         #endregion
 
@@ -125,6 +128,9 @@ namespace Sharpy.Window
                     m_evtDispatcher.Dispatch(this, new MouseScrolledEventArgs() { OffsetX = Convert.ToDecimal(t_wheelScroll.X), OffsetY = Convert.ToDecimal(t_wheelScroll.Y) });
                 };
             }
+
+            m_gl = m_windowSilk.CreateOpenGL();
+            m_gl.ClearColor(System.Drawing.Color.CornflowerBlue);
         }
 
         /// <summary>
@@ -133,6 +139,7 @@ namespace Sharpy.Window
         /// <param name="t_fElapsedTime">Elapsed time in ms</param>
         private void OnSilkWindowRender(double t_fElapsedTime)
         {
+            m_gl?.Clear(ClearBufferMask.ColorBufferBit);
             Render?.Invoke(t_fElapsedTime);
         }
 

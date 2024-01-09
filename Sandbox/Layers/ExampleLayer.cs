@@ -22,12 +22,12 @@ namespace Sandbox.Layers
 
         public override void OnRender(double t_fElapsedTime)
         {
-            Log.Debug("APP: Render {0} ms", t_fElapsedTime);
+            Log.Debug("APP: Render {0:N2} fps", 1 / t_fElapsedTime);
         }
 
         public override void OnUpdate(double t_fElapsedTime)
         {
-            Log.Debug("APP: Update {0} ms", t_fElapsedTime);
+            Log.Debug("APP: Update {0:N2} fps", 1 / t_fElapsedTime);
         }
 
         #endregion
