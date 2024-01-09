@@ -37,7 +37,16 @@ namespace Sharpy.Window
         /// </summary>
         private IWindow m_windowSilk;
 
+        /// <summary>
+        /// Silk.NET OpenGL context
+        /// </summary>
         private static GL? m_gl = null;
+
+
+        /// <summary>
+        /// Silk.NET input context
+        /// </summary>
+        private IInputContext? m_ctxInput;
 
         #endregion
 
@@ -86,6 +95,10 @@ namespace Sharpy.Window
         private void OnSilkWindowClosing()
         {
             m_evtDispatcher.Dispatch(this, new WindowClosingEventArgs());
+            
+            // perform clean-up
+            m_ctxInput?.Dispose();
+            m_gl?.Dispose();
         }
 
         /// <summary>
@@ -96,8 +109,8 @@ namespace Sharpy.Window
         /// </remarks>
         private void OnSilkWindowLoad()
         {
-            IInputContext input = m_windowSilk.CreateInput();
-            foreach(IKeyboard keyboard in input.Keyboards)
+            m_ctxInput = m_windowSilk.CreateInput();
+            foreach(IKeyboard keyboard in m_ctxInput.Keyboards)
             {
                 keyboard.KeyDown += (IKeyboard t_keyboard, Key t_key, int t_nkeyCode) => 
                 {
@@ -109,7 +122,7 @@ namespace Sharpy.Window
                 };
             }
 
-            foreach (IMouse mouse in input.Mice)
+            foreach (IMouse mouse in m_ctxInput.Mice)
             {
                 mouse.MouseDown += (IMouse t_mouse, MouseButton t_btnMouse) =>
                 {
