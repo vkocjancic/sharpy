@@ -48,6 +48,16 @@ namespace Sharpy.Window
         /// </summary>
         private IInputContext? m_ctxInput;
 
+        /// <summary>
+        /// Timer for FPS display
+        /// </summary>
+        private double m_fFrameTimer = 1.0;
+
+        /// <summary>
+        /// Frame counter
+        /// </summary>
+        private int m_nFrameCount = 0;
+
         #endregion
 
 
@@ -154,6 +164,7 @@ namespace Sharpy.Window
         {
             m_gl?.Clear(ClearBufferMask.ColorBufferBit);
             Render?.Invoke(t_fElapsedTime);
+            RenderFpsInTitle(t_fElapsedTime);
         }
 
         /// <summary>
@@ -172,6 +183,23 @@ namespace Sharpy.Window
         private void OnSilkWindowUpdate(double t_fElapsedTime)
         {
             Update?.Invoke(t_fElapsedTime);
+        }
+
+        #endregion
+
+
+        #region Helper methods
+
+        private void RenderFpsInTitle(double t_fElapsedTime)
+        {
+            m_fFrameTimer += t_fElapsedTime;
+            m_nFrameCount++;
+            if (m_fFrameTimer >= 1)
+            {
+                m_windowSilk.Title = $"{m_optWindow.m_sTitle} - FPS: {m_nFrameCount}";
+                m_fFrameTimer = 0;
+                m_nFrameCount = 0;
+            }
         }
 
         #endregion
