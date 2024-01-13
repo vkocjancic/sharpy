@@ -1,4 +1,5 @@
 ﻿using Sharpy.Events;
+using Sharpy.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +33,21 @@ namespace Sharpy.Layers
         #region Abstract methods
 
         /// <summary>
+        /// Triggers when window is closing
+        /// </summary>
+        public abstract void OnClose();
+
+        /// <summary>
         /// Handles any event
         /// </summary>
         /// <param name="t_evtArgs">Event arguments</param>
         public abstract void OnEvent(EventArgsBase t_evtArgs);
+
+        /// <summary>
+        /// Handles layer initialization
+        /// </summary>
+        /// <param name="window">Window reference, if layer has to set some things up</param>
+        public abstract void OnInit(WindowBase window);
 
         /// <summary>
         /// Updates layer

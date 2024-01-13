@@ -154,6 +154,8 @@ namespace Sharpy.Window
 
             m_gl = m_windowSilk.CreateOpenGL();
             m_gl.ClearColor(System.Drawing.Color.CornflowerBlue);
+
+            m_evtDispatcher.Dispatch(this, new WindowInitEventArgs());
         }
 
         /// <summary>

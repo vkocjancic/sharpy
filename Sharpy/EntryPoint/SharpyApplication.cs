@@ -76,12 +76,30 @@ namespace Sharpy.EntryPoint
         private void OnEventDispatcherEvent(object t_oSender, EventArgsBase t_evtArgs)
         {
             Log.Debug("{0}", t_evtArgs);
+
+            if (t_evtArgs is WindowInitEventArgs)
+            {
+                for (int i = 0; i < m_stackLayers.Count(); i++)
+                {
+                    m_stackLayers[i].OnInit((WindowBase)t_oSender);
+                }
+                return;
+            }
+
+            bool bIsWindowClosingEvent = t_evtArgs is WindowClosingEventArgs;
             for (int i = m_stackLayers.Count() - 1; i >= 0; i--)
             {
-                m_stackLayers[i].OnEvent(t_evtArgs);
-                if (t_evtArgs.IsHandled)
+                if (bIsWindowClosingEvent)
                 {
-                    break;
+                    m_stackLayers[i].OnClose();
+                }
+                else
+                {
+                    m_stackLayers[i].OnEvent(t_evtArgs);
+                    if (t_evtArgs.IsHandled)
+                    {
+                        break;
+                    }
                 }
             }
         }
