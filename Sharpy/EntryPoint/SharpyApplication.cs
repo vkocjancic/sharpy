@@ -121,7 +121,7 @@ namespace Sharpy.EntryPoint
         {
             for (int i = 0; i < m_stackLayers.Count(); i++)
             {
-                m_stackLayers[i].OnRender(t_fElapsedTime);
+                m_stackLayers[i].OnUpdate(t_fElapsedTime);
             }
         }      
 

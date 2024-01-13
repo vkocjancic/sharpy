@@ -59,7 +59,7 @@ namespace Sharpy.Layers
         /// Renders layer
         /// </summary>
         /// <param name="t_fElapsedTime">Elapsed time in miliseconds</param>
-        public abstract void OnRender(double t_fElapsedTIme);
+        public abstract void OnRender(double t_fElapsedTime);
 
         #endregion
 

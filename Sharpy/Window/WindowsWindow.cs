@@ -7,6 +7,7 @@ using Silk.NET.SDL;
 using Silk.NET.Windowing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -40,7 +41,7 @@ namespace Sharpy.Window
         /// <summary>
         /// Silk.NET OpenGL context
         /// </summary>
-        private static GL? m_gl = null;
+        private GL? m_gl = null;
 
 
         /// <summary>
@@ -92,6 +93,15 @@ namespace Sharpy.Window
         public override void Run()
         {
             m_windowSilk.Run();
+        }
+
+        public (GL, IWindow, IInputContext) GetWindowContext()
+        {
+            Debug.Assert(m_gl != null, "OpenGL context not set");
+            Debug.Assert(m_windowSilk != null, "Window context not set");
+            Debug.Assert(m_ctxInput != null, "Input context not set");
+
+            return (m_gl, m_windowSilk, m_ctxInput);
         }
 
         #endregion
@@ -175,6 +185,7 @@ namespace Sharpy.Window
         /// <param name="t_vec2dSize">Window size</param>
         private void OnSilkWindowResize(Vector2D<int> t_vec2dSize)
         {
+            m_gl?.Viewport(t_vec2dSize);
             m_evtDispatcher.Dispatch(this, new WindowResizeEventArgs() { WindowHeight = t_vec2dSize.Y, WindowWidth = t_vec2dSize.X });
         }
 
