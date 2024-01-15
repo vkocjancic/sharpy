@@ -1,4 +1,5 @@
-﻿using Sharpy.Events;
+﻿using ImGuiNET;
+using Sharpy.Events;
 using Sharpy.Window;
 using Silk.NET.OpenGL.Extensions.ImGui;
 using System;
@@ -45,6 +46,7 @@ namespace Sharpy.Layers
                 winCtx.Item2,
                 winCtx.Item3
             );
+            ImGuiNET.ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable | ImGuiConfigFlags.ViewportsEnable;
         }
 
         public override void OnRender(double t_fElapsedTime)
