@@ -25,6 +25,20 @@ namespace Sharpy.Layers
 
         #endregion
 
+
+        #region Member methods
+
+        /// <summary>
+        /// Method for generating custom ImGui content
+        /// </summary>
+        public virtual void OnGuiRender()
+        {
+            ImGuiNET.ImGui.ShowDemoWindow();
+        }
+
+        #endregion
+
+
         #region LayerBase implementation
 
         public override void OnClose()
@@ -55,7 +69,7 @@ namespace Sharpy.Layers
             {
                 return;
             }
-            ImGuiNET.ImGui.ShowDemoWindow();
+            OnGuiRender();
             m_ctrlImGui.Render();
         }
 
