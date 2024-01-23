@@ -1,5 +1,6 @@
 ﻿using Sharpy.Events;
 using Sharpy.Logging;
+using Sharpy.Rendering;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -38,10 +39,15 @@ namespace Sharpy.Window
         /// </summary>
         private IWindow m_windowSilk;
 
+        ///// <summary>
+        ///// Silk.NET OpenGL context
+        ///// </summary>
+        //private GL? m_gl = null;
+
         /// <summary>
-        /// Silk.NET OpenGL context
+        /// Render context
         /// </summary>
-        private GL? m_gl = null;
+        private RenderContextBase m_ctxRender;
 
 
         /// <summary>
@@ -81,6 +87,8 @@ namespace Sharpy.Window
             m_windowSilk.Resize += OnSilkWindowResize;
             m_windowSilk.Render += OnSilkWindowRender;
             m_windowSilk.Update += OnSilkWindowUpdate;
+
+            m_ctxRender = new OpenGlRenderContext(m_windowSilk);
         }
 
         #endregion
@@ -97,11 +105,12 @@ namespace Sharpy.Window
 
         public (GL, IWindow, IInputContext) GetWindowContext()
         {
-            Debug.Assert(m_gl != null, "OpenGL context not set");
+            GL? gl = (GL?)m_ctxRender.GetContextHandle();
+            Debug.Assert(gl != null, "OpenGL context not set");
             Debug.Assert(m_windowSilk != null, "Window context not set");
             Debug.Assert(m_ctxInput != null, "Input context not set");
 
-            return (m_gl, m_windowSilk, m_ctxInput);
+            return (gl, m_windowSilk, m_ctxInput);
         }
 
         #endregion
@@ -118,7 +127,7 @@ namespace Sharpy.Window
             
             // perform clean-up
             m_ctxInput?.Dispose();
-            m_gl?.Dispose();
+            m_ctxRender.Dispose();
         }
 
         /// <summary>
@@ -162,8 +171,7 @@ namespace Sharpy.Window
                 };
             }
 
-            m_gl = m_windowSilk.CreateOpenGL();
-            m_gl.ClearColor(System.Drawing.Color.CornflowerBlue);
+            m_ctxRender.Init();
 
             m_evtDispatcher.Dispatch(this, new WindowInitEventArgs());
         }
@@ -174,7 +182,7 @@ namespace Sharpy.Window
         /// <param name="t_fElapsedTime">Elapsed time in ms</param>
         private void OnSilkWindowRender(double t_fElapsedTime)
         {
-            m_gl?.Clear(ClearBufferMask.ColorBufferBit);
+            m_ctxRender.SwapBuffers();
             Render?.Invoke(t_fElapsedTime);
             RenderFpsInTitle(t_fElapsedTime);
         }
@@ -185,7 +193,7 @@ namespace Sharpy.Window
         /// <param name="t_vec2dSize">Window size</param>
         private void OnSilkWindowResize(Vector2D<int> t_vec2dSize)
         {
-            m_gl?.Viewport(t_vec2dSize);
+            m_ctxRender.SetViewport(t_vec2dSize);
             m_evtDispatcher.Dispatch(this, new WindowResizeEventArgs() { WindowHeight = t_vec2dSize.Y, WindowWidth = t_vec2dSize.X });
         }
 
