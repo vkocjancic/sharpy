@@ -81,6 +81,7 @@ namespace Sharpy.Rendering
             }
             // free unmanaged resources (unmanaged objects) and override finalizer
             // set large fields to null
+            m_gl = null;
             m_bDisposed = true;
         }
 
