@@ -45,12 +45,6 @@ namespace Sharpy.Window
         //private GL? m_gl = null;
 
         /// <summary>
-        /// Render context
-        /// </summary>
-        private RenderContextBase m_ctxRender;
-
-
-        /// <summary>
         /// Silk.NET input context
         /// </summary>
         private IInputContext? m_ctxInput;
@@ -105,7 +99,7 @@ namespace Sharpy.Window
 
         public (GL, IWindow, IInputContext) GetWindowContext()
         {
-            GL? gl = (GL?)m_ctxRender.GetContextHandle();
+            GL? gl = (GL?)m_ctxRender?.GetContextHandle();
             Debug.Assert(gl != null, "OpenGL context not set");
             Debug.Assert(m_windowSilk != null, "Window context not set");
             Debug.Assert(m_ctxInput != null, "Input context not set");
@@ -127,7 +121,7 @@ namespace Sharpy.Window
             
             // perform clean-up
             m_ctxInput?.Dispose();
-            m_ctxRender.Dispose();
+            m_ctxRender?.Dispose();
         }
 
         /// <summary>
@@ -171,7 +165,12 @@ namespace Sharpy.Window
                 };
             }
 
-            m_ctxRender.Init();
+            m_ctxRender?.Init();
+            if (null != m_ctxRender)
+            {
+                var apiRender = RenderApi.GetInstance(m_ctxRender);
+                apiRender.Init();
+            }
 
             m_evtDispatcher.Dispatch(this, new WindowInitEventArgs());
         }
@@ -182,7 +181,7 @@ namespace Sharpy.Window
         /// <param name="t_fElapsedTime">Elapsed time in ms</param>
         private void OnSilkWindowRender(double t_fElapsedTime)
         {
-            m_ctxRender.SwapBuffers();
+            m_ctxRender?.SwapBuffers();
             Render?.Invoke(t_fElapsedTime);
             RenderFpsInTitle(t_fElapsedTime);
         }
@@ -193,7 +192,7 @@ namespace Sharpy.Window
         /// <param name="t_vec2dSize">Window size</param>
         private void OnSilkWindowResize(Vector2D<int> t_vec2dSize)
         {
-            m_ctxRender.SetViewport(t_vec2dSize);
+            m_ctxRender?.SetViewport(t_vec2dSize);
             m_evtDispatcher.Dispatch(this, new WindowResizeEventArgs() { WindowHeight = t_vec2dSize.Y, WindowWidth = t_vec2dSize.X });
         }
 

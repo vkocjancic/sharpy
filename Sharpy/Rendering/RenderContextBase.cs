@@ -11,7 +11,7 @@ namespace Sharpy.Rendering
     /// <summary>
     /// Render context base class
     /// </summary>
-    internal abstract class RenderContextBase : IDisposable
+    public abstract class RenderContextBase : IDisposable
     {
 
         #region Declarations

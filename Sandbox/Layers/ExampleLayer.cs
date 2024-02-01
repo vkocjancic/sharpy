@@ -1,6 +1,7 @@
 ﻿using Sharpy.Events;
 using Sharpy.Layers;
 using Sharpy.Logging;
+using Sharpy.Rendering;
 using Sharpy.Window;
 using Silk.NET.SDL;
 using System;
@@ -33,12 +34,13 @@ namespace Sandbox.Layers
 
         public override void OnRender(double t_fElapsedTime)
         {
-            //Log.Debug("APP: Render {0:N2} fps", 1 / t_fElapsedTime);
+            var apiRender = RenderApi.GetInstance();
+            // TODO: apiRender.DrawTriangle();
         }
 
         public override void OnUpdate(double t_fElapsedTime)
         {
-            //Log.Debug("APP: Update {0:N2} fps", 1 / t_fElapsedTime);
+            
         }
 
         #endregion

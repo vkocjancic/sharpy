@@ -1,4 +1,5 @@
 ﻿using Sharpy.Events;
+using Sharpy.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,11 @@ namespace Sharpy.Window
         /// Event dispatcher
         /// </summary>
         protected EventDispatcher m_evtDispatcher;
+
+        /// <summary>
+        /// Render context
+        /// </summary>
+        protected RenderContextBase? m_ctxRender;
 
         #endregion
 

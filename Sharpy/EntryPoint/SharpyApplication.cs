@@ -59,7 +59,8 @@ namespace Sharpy.EntryPoint
             };
             var window = new WindowsWindow(options, m_evtDispatcher);
             window.Render += OnWindowRender;
-            window.Update += OnWindowUpdate;
+            window.Update += OnWindowUpdate;           
+            
             window.Run();
         }
 
