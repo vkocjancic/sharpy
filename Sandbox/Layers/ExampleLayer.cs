@@ -3,6 +3,7 @@ using Sharpy.Layers;
 using Sharpy.Logging;
 using Sharpy.Rendering;
 using Sharpy.Window;
+using Silk.NET.Maths;
 using Silk.NET.SDL;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,10 @@ namespace Sandbox.Layers
         public override void OnRender(double t_fElapsedTime)
         {
             var apiRender = RenderApi.GetInstance();
-            // TODO: apiRender.DrawTriangle();
+            apiRender.DrawQuad(
+                new Vector2D<decimal>(-0.5M, 0.5M),
+                new Vector2D<decimal>(0.5M, -0.5M)
+            );
         }
 
         public override void OnUpdate(double t_fElapsedTime)

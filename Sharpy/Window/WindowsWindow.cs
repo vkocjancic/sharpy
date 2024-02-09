@@ -118,8 +118,10 @@ namespace Sharpy.Window
         private void OnSilkWindowClosing()
         {
             m_evtDispatcher.Dispatch(this, new WindowClosingEventArgs());
-            
+
             // perform clean-up
+            var apiRender = RenderApi.GetInstance();
+            apiRender.Close();
             m_ctxInput?.Dispose();
             m_ctxRender?.Dispose();
         }
