@@ -46,7 +46,7 @@ namespace Sharpy.Rendering
         /// <summary>
         /// Get fragment shader
         /// </summary>
-        public Sharpy.Rendering.Shader? FragmentShader { get; private set; }
+        public Sharpy.Rendering.Shader FragmentShader { get; private set; }
 
         /// <summary>
         /// Get indices array
@@ -61,7 +61,7 @@ namespace Sharpy.Rendering
         /// <summary>
         /// Get vertex shader
         /// </summary>
-        public Sharpy.Rendering.Shader? VertexShader { get; private set; }
+        public Sharpy.Rendering.Shader VertexShader { get; private set; }
 
         #endregion
 

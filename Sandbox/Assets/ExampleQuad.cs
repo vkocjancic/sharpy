@@ -29,7 +29,7 @@ namespace Sandbox.Assets
             };
 
             var shdrVertex = new Shader();
-            shdrVertex.Source = @"
+            shdrVertex.m_sSource = @"
 #version 330 core
 
 layout (location = 0) in vec4 vPos;
@@ -39,9 +39,10 @@ void main()
     gl_Position = vec4(vPos.x, vPos.y, vPos.z, 1.0);
 }
 ";
+            shdrVertex.AddAttribute(new ShaderAttribute("vPos", 0, 3));
 
             var shdrFragment = new Shader();
-            shdrFragment.Source = @"
+            shdrFragment.m_sSource = @"
 #version 330 core
 
 out vec4 FragColor;

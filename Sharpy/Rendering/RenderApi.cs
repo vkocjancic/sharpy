@@ -101,7 +101,7 @@ namespace Sharpy.Rendering
 
             // create vertex shader
             uint unVertexShader = gl.CreateShader(ShaderType.VertexShader);
-            gl.ShaderSource(unVertexShader, obj.VertexShader?.Source);
+            gl.ShaderSource(unVertexShader, obj.VertexShader.m_sSource);
             gl.CompileShader(unVertexShader);
 
             // check the shader after compilation
@@ -113,7 +113,7 @@ namespace Sharpy.Rendering
 
             // create fragment shader
             uint unFragmentShader = gl.CreateShader(ShaderType.FragmentShader);
-            gl.ShaderSource(unFragmentShader, obj.FragmentShader?.Source);
+            gl.ShaderSource(unFragmentShader, obj.FragmentShader.m_sSource);
             gl.CompileShader(unFragmentShader);
 
             // check the shader after compilation
@@ -142,8 +142,10 @@ namespace Sharpy.Rendering
             gl.DeleteShader(unVertexShader);
             gl.DeleteShader(unFragmentShader);
 
-            // TODO: we need to do abstraction for attributes as well
-            gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), null);
+            foreach (ShaderAttribute attribute in obj.VertexShader.m_rgAttributes ?? new List<ShaderAttribute>())
+            {
+                gl.VertexAttribPointer(attribute.m_unPosition, attribute.m_nSize, VertexAttribPointerType.Float, false, (uint)attribute.m_nSize * sizeof(float), null);
+            }
             gl.EnableVertexAttribArray(0);
         }
 
@@ -158,8 +160,7 @@ namespace Sharpy.Rendering
             gl.BindVertexArray(obj.m_unVertexArrayId);
             gl.UseProgram(obj.m_unShaderProgramId);
             
-            // TODO: read indices length form renderable object
-            gl.DrawElements(PrimitiveType.Triangles, (uint)6 /* indices.length */, DrawElementsType.UnsignedInt, null);
+            gl.DrawElements(PrimitiveType.Triangles, (uint)(obj.Indices?.Length ?? 0), DrawElementsType.UnsignedInt, null);
         }
 
         #endregion
