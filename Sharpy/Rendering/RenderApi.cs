@@ -26,35 +26,6 @@ namespace Sharpy.Rendering
 
         private RenderContextBase m_ctxRender;
 
-        private uint m_unVertexArray;
-        private uint m_unVertexBuffer;
-        private uint m_unElementArrayBuffer;
-        private uint m_unShader;
-
-        //Vertex shaders are run on each vertex.
-        private static readonly string VertexShaderSource = @"
-#version 330 core
-
-layout (location = 0) in vec4 vPos;
-        
-void main()
-{
-    gl_Position = vec4(vPos.x, vPos.y, vPos.z, 1.0);
-}
-";
-
-        //Fragment shaders are run on each fragment/pixel of the geometry.
-        private static readonly string FragmentShaderSource = @"
-#version 330 core
-
-out vec4 FragColor;
-
-void main()
-{
-    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-}
-";
-
         #endregion
 
 
@@ -77,67 +48,52 @@ void main()
         /// <summary>
         /// Clean up buffers
         /// </summary>
-        public void Close()
+        public void Close(RenderableObjectBase obj)
         {
             var gl = (GL?)m_ctxRender.GetContextHandle();
             if (null == gl)
             {
                 return;
             }
-            gl.DeleteBuffer(m_unVertexBuffer);
-            gl.DeleteBuffer(m_unElementArrayBuffer);
-            gl.DeleteVertexArray(m_unVertexArray);
-            gl.DeleteProgram(m_unShader);
+            gl.DeleteBuffer(obj.m_unVertexBufferId);
+            gl.DeleteBuffer(obj.m_unElementArrayBufferId);
+            gl.DeleteVertexArray(obj.m_unVertexArrayId);
+            gl.DeleteProgram(obj.m_unShaderProgramId);
         }
 
         /// <summary>
         /// Perform object initialization
         /// </summary>
-        public unsafe void Init() 
+        public unsafe void Init(RenderableObjectBase obj) 
         {
             var gl = (GL?)m_ctxRender.GetContextHandle();
             if (null == gl)
             {
                 return;
             }
-            m_unVertexArray = gl.GenVertexArray();
-            gl.BindVertexArray(m_unVertexArray);
+            obj.m_unVertexArrayId = gl.GenVertexArray();
+            gl.BindVertexArray(obj.m_unVertexArrayId);
 
-            m_unVertexBuffer = gl.GenBuffer();
-            gl.BindBuffer(BufferTargetARB.ArrayBuffer, m_unVertexBuffer);
-
-            float[] rgfVertices =
-            {
-                 0.5f,  0.5f, 0.0f,
-                 0.5f, -0.5f, 0.0f,
-                -0.5f, -0.5f, 0.0f,
-                -0.5f,  0.5f, 0.5f
-            };
+            obj.m_unVertexBufferId = gl.GenBuffer();
+            gl.BindBuffer(BufferTargetARB.ArrayBuffer, obj.m_unVertexBufferId);
 
             // upload vertices to buffer
-            fixed (float* pfBuf = rgfVertices)
+            fixed (float* pfBuf = obj.Vertices)
             {
                 gl.BufferData(BufferTargetARB.ArrayBuffer,
-                    (nuint)(rgfVertices.Length * sizeof(uint)),
+                    (nuint)((obj.Vertices?.Length ?? 0) * sizeof(uint)),
                     pfBuf,
                     BufferUsageARB.StaticDraw
                 );
             }
 
-            m_unElementArrayBuffer = gl.GenBuffer();
-            gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, m_unElementArrayBuffer);
+            obj.m_unElementArrayBufferId = gl.GenBuffer();
+            gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, obj.m_unElementArrayBufferId);
 
-            // set up indices
-            uint[] rgunIndices =
-            {
-                0u, 1u, 3u,
-                1u, 2u, 3u
-            };
-
-            fixed (void* punBuf = rgunIndices)
+            fixed (void* punBuf = obj.Indices)
             {
                 gl.BufferData(BufferTargetARB.ElementArrayBuffer,
-                    (nuint)(rgunIndices.Length * sizeof(uint)),
+                    (nuint)((obj.Indices?.Length ?? 0) * sizeof(uint)),
                     punBuf,
                     BufferUsageARB.StaticDraw
                 );
@@ -145,65 +101,64 @@ void main()
 
             // create vertex shader
             uint unVertexShader = gl.CreateShader(ShaderType.VertexShader);
-            gl.ShaderSource(unVertexShader, VertexShaderSource);
+            gl.ShaderSource(unVertexShader, obj.VertexShader?.Source);
             gl.CompileShader(unVertexShader);
 
             // check the shader after compilation
             string sInfoLog = gl.GetShaderInfoLog(unVertexShader);
             if (!string.IsNullOrEmpty(sInfoLog))
             {
-                Logging.Log.Error("Error compiling vertex shader {0}", sInfoLog);
+                Logging.Log.Error("Error compiling vertex shader for object {0}:\r\n{1}", obj, sInfoLog);
             }
 
             // create fragment shader
             uint unFragmentShader = gl.CreateShader(ShaderType.FragmentShader);
-            gl.ShaderSource(unFragmentShader, FragmentShaderSource);
+            gl.ShaderSource(unFragmentShader, obj.FragmentShader?.Source);
             gl.CompileShader(unFragmentShader);
 
             // check the shader after compilation
             sInfoLog = gl.GetShaderInfoLog(unVertexShader);
             if (!string.IsNullOrEmpty(sInfoLog))
             {
-                Logging.Log.Error("Error compiling fragment shader {0}", sInfoLog);
+                Logging.Log.Error("Error compiling fragment shader for object {0}:\r\n{1}", obj, sInfoLog);
             }
 
             // combine both shaders
-            m_unShader = gl.CreateProgram();
-            gl.AttachShader(m_unShader, unVertexShader);
-            gl.AttachShader(m_unShader, unFragmentShader);
-            gl.LinkProgram(m_unShader);
+            obj.m_unShaderProgramId = gl.CreateProgram();
+            gl.AttachShader(obj.m_unShaderProgramId, unVertexShader);
+            gl.AttachShader(obj.m_unShaderProgramId, unFragmentShader);
+            gl.LinkProgram(obj.m_unShaderProgramId);
 
             // check linking errors
-            gl.GetProgram(m_unShader, GLEnum.LinkStatus, out int nStatus);
+            gl.GetProgram(obj.m_unShaderProgramId, GLEnum.LinkStatus, out int nStatus);
             if (nStatus == 0)
             {
-                Logging.Log.Error("Error linking shader {0}", gl.GetProgramInfoLog(m_unShader));
+                Logging.Log.Error("Error linking shader for object {0}:\r\n{1}", obj, gl.GetProgramInfoLog(obj.m_unShaderProgramId));
             }
 
             // clean up shaders
-            gl.DetachShader(m_unShader, unVertexShader);
-            gl.DetachShader(m_unShader, unFragmentShader);
+            gl.DetachShader(obj.m_unShaderProgramId, unVertexShader);
+            gl.DetachShader(obj.m_unShaderProgramId, unFragmentShader);
             gl.DeleteShader(unVertexShader);
             gl.DeleteShader(unFragmentShader);
 
+            // TODO: we need to do abstraction for attributes as well
             gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), null);
             gl.EnableVertexAttribArray(0);
         }
 
-        /// <summary>
-        /// Draw quad object
-        /// </summary>
-        /// <param name="t_v2dfStart">Start position</param>
-        /// <param name="t_v2dfEnd">End position</param>
-        public unsafe void DrawQuad(Vector2D<decimal> t_v2dfStart, Vector2D<decimal> t_v2dfEnd)
+
+        public unsafe void Draw(RenderableObjectBase obj)
         {
             var gl = (GL?)m_ctxRender.GetContextHandle();
             if (null == gl)
             {
                 return;
             }
-            gl.BindVertexArray(m_unVertexArray);
-            gl.UseProgram(m_unShader);
+            gl.BindVertexArray(obj.m_unVertexArrayId);
+            gl.UseProgram(obj.m_unShaderProgramId);
+            
+            // TODO: read indices length form renderable object
             gl.DrawElements(PrimitiveType.Triangles, (uint)6 /* indices.length */, DrawElementsType.UnsignedInt, null);
         }
 

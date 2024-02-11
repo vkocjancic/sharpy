@@ -120,8 +120,6 @@ namespace Sharpy.Window
             m_evtDispatcher.Dispatch(this, new WindowClosingEventArgs());
 
             // perform clean-up
-            var apiRender = RenderApi.GetInstance();
-            apiRender.Close();
             m_ctxInput?.Dispose();
             m_ctxRender?.Dispose();
         }
@@ -170,8 +168,7 @@ namespace Sharpy.Window
             m_ctxRender?.Init();
             if (null != m_ctxRender)
             {
-                var apiRender = RenderApi.GetInstance(m_ctxRender);
-                apiRender.Init();
+                RenderApi.GetInstance(m_ctxRender);
             }
 
             m_evtDispatcher.Dispatch(this, new WindowInitEventArgs());

@@ -1,4 +1,5 @@
-﻿using Sharpy.Events;
+﻿using Sandbox.Assets;
+using Sharpy.Events;
 using Sharpy.Layers;
 using Sharpy.Logging;
 using Sharpy.Rendering;
@@ -16,11 +17,19 @@ namespace Sandbox.Layers
     public class ExampleLayer : LayerBase
     {
 
+        #region Fields
+
+        private ExampleQuad m_robjQuad = new ExampleQuad();
+
+        #endregion
+
+
         #region LayerBase implementation
 
         public override void OnClose()
         {
             Log.Info("APP: Close");
+            m_robjQuad.Close();
         }
 
         public override void OnEvent(EventArgsBase t_evtArgs)
@@ -31,15 +40,12 @@ namespace Sandbox.Layers
         public override void OnInit(WindowBase window)
         {
             Log.Info("APP: Init");
+            m_robjQuad.Init(); 
         }
 
         public override void OnRender(double t_fElapsedTime)
         {
-            var apiRender = RenderApi.GetInstance();
-            apiRender.DrawQuad(
-                new Vector2D<decimal>(-0.5M, 0.5M),
-                new Vector2D<decimal>(0.5M, -0.5M)
-            );
+            m_robjQuad.Render();
         }
 
         public override void OnUpdate(double t_fElapsedTime)
