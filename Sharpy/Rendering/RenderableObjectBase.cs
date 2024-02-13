@@ -73,7 +73,7 @@ namespace Sharpy.Rendering
         /// </summary>
         public void Close()
         {
-            var api = RenderApi.GetInstance();
+            var api = RenderApiBase.GetInstance();
             api.Close(this);
         }
 
@@ -84,7 +84,7 @@ namespace Sharpy.Rendering
 
         public void Render()
         {
-            var api = RenderApi.GetInstance();
+            var api = RenderApiBase.GetInstance();
             api.Draw(this);
         }
 
@@ -107,7 +107,7 @@ namespace Sharpy.Rendering
             FragmentShader = t_shdrFragment;
             VertexShader = t_shdrVertex;
 
-            var api = RenderApi.GetInstance();
+            var api = RenderApiBase.GetInstance();
             api.Init(this);
         }
 

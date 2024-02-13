@@ -1,6 +1,7 @@
 ﻿using Sharpy.Events;
 using Sharpy.Logging;
 using Sharpy.Rendering;
+using Sharpy.Rendering.OpenGL;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -168,7 +169,7 @@ namespace Sharpy.Window
             m_ctxRender?.Init();
             if (null != m_ctxRender)
             {
-                RenderApi.GetInstance(m_ctxRender);
+                RenderApiBase.GetInstance(m_ctxRender);
             }
 
             m_evtDispatcher.Dispatch(this, new WindowInitEventArgs());

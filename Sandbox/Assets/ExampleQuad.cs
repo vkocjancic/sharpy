@@ -32,24 +32,30 @@ namespace Sandbox.Assets
             shdrVertex.m_sSource = @"
 #version 330 core
 
-layout (location = 0) in vec4 vPos;
+layout (location = 0) in vec3 a_Position;
+
+out vec3 v_Position;
         
 void main()
 {
-    gl_Position = vec4(vPos.x, vPos.y, vPos.z, 1.0);
+    v_Position = a_Position;
+    gl_Position = vec4(a_Position, 1.0);
 }
 ";
-            shdrVertex.AddAttribute(new ShaderAttribute("vPos", 0, 3));
+
+            shdrVertex.AddAttribute(new ShaderAttribute("a_Position", 0, 3));
 
             var shdrFragment = new Shader();
             shdrFragment.m_sSource = @"
 #version 330 core
 
-out vec4 FragColor;
+layout (location = 0) out vec4 color;
+
+in vec3 v_Position;
 
 void main()
 {
-    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    color = vec4(v_Position * 0.5 + 0.5, 1.0f);
 }
 ";
             Init(rgfVertices, rgunIndices, shdrVertex, shdrFragment);

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sharpy.Rendering
+namespace Sharpy.Rendering.OpenGL
 {
 
     /// <summary>
@@ -55,7 +55,12 @@ namespace Sharpy.Rendering
         public override void Init()
         {
             m_gl = m_window.CreateOpenGL();
-            m_gl.ClearColor(System.Drawing.Color.CornflowerBlue);
+            m_gl.ClearColor(System.Drawing.Color.Black);
+
+            Logging.Log.Info("OpenGL Info:");
+            Logging.Log.Info("  Vendor: {0}", m_gl.GetStringS(GLEnum.Vendor));
+            Logging.Log.Info("  Renderer: {0}", m_gl.GetStringS(GLEnum.Renderer));
+            Logging.Log.Info("  Version: {0}", m_gl.GetStringS(GLEnum.Version));
         }
 
         public override void SetViewport(Vector2D<int> t_vec2dSize)
