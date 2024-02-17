@@ -19,9 +19,9 @@ namespace Sharpy.Rendering
         #region Fields
 
         /// <summary>
-        /// Element array buffer id for object
+        /// Element array buffer for object
         /// </summary>
-        public uint m_unElementArrayBufferId;
+        internal IndexBufferBase? m_bufIndex;
 
         /// <summary>
         /// Shader program id
@@ -29,14 +29,9 @@ namespace Sharpy.Rendering
         public uint m_unShaderProgramId;
 
         /// <summary>
-        /// Stores vertex array id for object
+        /// Stores vertex buffer
         /// </summary>
-        public uint m_unVertexArrayId;
-
-        /// <summary>
-        /// Stores vertex buffer id for object
-        /// </summary>
-        public uint m_unVertexBufferId;
+        internal VertexBufferBase? m_bufVertex;
 
         #endregion
 

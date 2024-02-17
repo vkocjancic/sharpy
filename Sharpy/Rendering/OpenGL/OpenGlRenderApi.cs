@@ -23,19 +23,18 @@ namespace Sharpy.Rendering.OpenGL
         public override void Close(RenderableObjectBase obj)
         {
             Debug.Assert(m_gl != null, "Render context is not set");
-            m_gl.DeleteBuffer(obj.m_unVertexBufferId);
-            m_gl.DeleteBuffer(obj.m_unElementArrayBufferId);
-            m_gl.DeleteVertexArray(obj.m_unVertexArrayId);
+            obj.m_bufIndex?.Unbind();
+            obj.m_bufVertex?.Unbind();
             m_gl.DeleteProgram(obj.m_unShaderProgramId);
         }
 
         public override unsafe void Draw(RenderableObjectBase obj)
         {
             Debug.Assert(m_gl != null, "Render context is not set");
-            m_gl.BindVertexArray(obj.m_unVertexArrayId);
+            obj.m_bufVertex?.Bind();
             m_gl.UseProgram(obj.m_unShaderProgramId);
 
-            m_gl.DrawElements(PrimitiveType.Triangles, (uint)(obj.Indices?.Length ?? 0), DrawElementsType.UnsignedInt, null);
+            obj.m_bufIndex?.Bind();
         }
 
         public override unsafe void Init(RenderableObjectBase obj)
@@ -46,33 +45,9 @@ namespace Sharpy.Rendering.OpenGL
                 return;
             }
 
-            obj.m_unVertexArrayId = m_gl.GenVertexArray();
-            m_gl.BindVertexArray(obj.m_unVertexArrayId);
+            obj.m_bufVertex = new OpenGlVertexBuffer(m_gl, obj.Vertices);
 
-            obj.m_unVertexBufferId = m_gl.GenBuffer();
-            m_gl.BindBuffer(BufferTargetARB.ArrayBuffer, obj.m_unVertexBufferId);
-
-            // upload vertices to buffer
-            fixed (float* pfBuf = obj.Vertices)
-            {
-                m_gl.BufferData(BufferTargetARB.ArrayBuffer,
-                    (nuint)((obj.Vertices?.Length ?? 0) * sizeof(uint)),
-                    pfBuf,
-                    BufferUsageARB.StaticDraw
-                );
-            }
-
-            obj.m_unElementArrayBufferId = m_gl.GenBuffer();
-            m_gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, obj.m_unElementArrayBufferId);
-
-            fixed (void* punBuf = obj.Indices)
-            {
-                m_gl.BufferData(BufferTargetARB.ElementArrayBuffer,
-                    (nuint)((obj.Indices?.Length ?? 0) * sizeof(uint)),
-                    punBuf,
-                    BufferUsageARB.StaticDraw
-                );
-            }
+            obj.m_bufIndex = new OpenGlIndexBuffer(m_gl, obj.Indices);
 
             // create vertex shader
             uint unVertexShader = m_gl.CreateShader(ShaderType.VertexShader);
