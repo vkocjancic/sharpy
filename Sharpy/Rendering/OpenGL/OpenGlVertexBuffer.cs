@@ -59,13 +59,31 @@ namespace Sharpy.Rendering.OpenGL
             m_gl.BindVertexArray(m_unArrayId);
         }
 
+        public override unsafe void SetAttributes(ref readonly ShaderAttributeList t_lstAttributes)
+        {
+            // bind shader attributes
+            for (int i = 0; i < t_lstAttributes.Count; i++)
+            {
+                ShaderAttribute attribute = t_lstAttributes[i];
+                m_gl.EnableVertexAttribArray((uint)i);
+                m_gl.VertexAttribPointer(
+                    (uint)i, 
+                    attribute.GetComponentCount(),
+                    OpenGlTypeAdapter.FromShaderAttributeType(attribute.m_typeOfData), 
+                    attribute.m_bNormalized, 
+                    t_lstAttributes.Stride, 
+                    (void *)attribute.m_unOffset);
+            }
+        }
+
         public override void Unbind()
         {
             m_gl.DeleteBuffer(m_unBufferId);
             m_gl.DeleteVertexArray(m_unArrayId);
-        } 
+        }
 
         #endregion
+
 
     }
 

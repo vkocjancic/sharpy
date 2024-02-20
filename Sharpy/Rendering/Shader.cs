@@ -7,31 +7,36 @@ using System.Threading.Tasks;
 
 namespace Sharpy.Rendering
 {
-    public struct Shader
+    public class Shader
     {
 
         #region Fields
 
-        public List<ShaderAttribute> m_rgAttributes;
+        public ShaderAttributeList m_lstAttributes = new ShaderAttributeList();
 
-        public string m_sSource;
+        public string m_sSource = "";
 
         #endregion
 
 
         #region Public methods
 
+        ///// <summary>
+        ///// Adds attribute to shader
+        ///// </summary>
+        ///// <param name="t_attr">Attribute to add</param>
+        //public void AddAttribute(ShaderAttribute t_attr)
+        //{
+        //    m_rgAttributes.Add(t_attr);
+        //}
+
         /// <summary>
-        /// Adds attribute to shader
+        /// Adds attributes to shader
         /// </summary>
-        /// <param name="t_attr">Attribute to add</param>
-        public void AddAttribute(ShaderAttribute t_attr)
+        /// <param name="t_rgAttributes">Attributes to add</param>
+        public void AddAttributes(params ShaderAttribute[] t_rgAttributes)
         {
-            if (null == m_rgAttributes)
-            {
-                m_rgAttributes = new List<ShaderAttribute>();
-            }
-            m_rgAttributes.Add(t_attr);
+            m_lstAttributes.AddRange(t_rgAttributes);
         }
 
         #endregion

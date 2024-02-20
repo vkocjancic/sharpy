@@ -46,12 +46,16 @@ namespace Sharpy.Rendering.OpenGL
             }
 
             obj.m_bufVertex = new OpenGlVertexBuffer(m_gl, obj.Vertices);
+            if (obj.VertexShader != null)
+            {
+                obj.m_bufVertex.SetAttributes(ref obj.VertexShader.m_lstAttributes);
+            }
 
             obj.m_bufIndex = new OpenGlIndexBuffer(m_gl, obj.Indices);
 
             // create vertex shader
             uint unVertexShader = m_gl.CreateShader(ShaderType.VertexShader);
-            m_gl.ShaderSource(unVertexShader, obj.VertexShader.m_sSource);
+            m_gl.ShaderSource(unVertexShader, obj.VertexShader?.m_sSource);
             m_gl.CompileShader(unVertexShader);
 
             // check the shader after compilation
@@ -63,7 +67,7 @@ namespace Sharpy.Rendering.OpenGL
 
             // create fragment shader
             uint unFragmentShader = m_gl.CreateShader(ShaderType.FragmentShader);
-            m_gl.ShaderSource(unFragmentShader, obj.FragmentShader.m_sSource);
+            m_gl.ShaderSource(unFragmentShader, obj.FragmentShader?.m_sSource);
             m_gl.CompileShader(unFragmentShader);
 
             // check the shader after compilation
@@ -91,12 +95,7 @@ namespace Sharpy.Rendering.OpenGL
             m_gl.DetachShader(obj.m_unShaderProgramId, unFragmentShader);
             m_gl.DeleteShader(unVertexShader);
             m_gl.DeleteShader(unFragmentShader);
-
-            foreach (ShaderAttribute attribute in obj.VertexShader.m_rgAttributes ?? new List<ShaderAttribute>())
-            {
-                m_gl.VertexAttribPointer(attribute.m_unPosition, attribute.m_nSize, VertexAttribPointerType.Float, false, (uint)attribute.m_nSize * sizeof(float), null);
-            }
-            m_gl.EnableVertexAttribArray(0);
+                       
         } 
 
         #endregion
