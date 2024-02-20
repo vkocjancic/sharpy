@@ -70,13 +70,10 @@ namespace Sharpy.Rendering
             switch (m_typeOfData)
             {
                 case DataType.Float: 
-                    return 1;
                 case DataType.Float2: 
-                    return 2;
                 case DataType.Float3: 
-                    return 3;
                 case DataType.Float4: 
-                    return 4;
+                    return (int)(m_unSize / sizeof(float));
             }
 
             Debug.Fail("Unknown shader attribute data type");
