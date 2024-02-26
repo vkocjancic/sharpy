@@ -1,4 +1,5 @@
-﻿using Sharpy.Rendering.OpenGL;
+﻿using Sharpy.Logging;
+using Sharpy.Rendering.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -76,7 +77,7 @@ namespace Sharpy.Rendering
                             m_sapiInstance.RenderContext = t_ctxRender;
                             break;
                         default:
-                            Debug.Fail("Unknown render context");
+                            SharpyAssert.Fail("Unknown render context");
                             break;
                     }
                 }
@@ -90,7 +91,7 @@ namespace Sharpy.Rendering
         /// <returns>Render API instance</returns>
         public static RenderApiBase GetInstance()
         {
-            Debug.Assert(null != m_sapiInstance, "Instance is not set!");
+            SharpyAssert.Assert(null != m_sapiInstance, "Instance is not set!");
             return m_sapiInstance;
         }
 

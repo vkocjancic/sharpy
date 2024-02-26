@@ -1,4 +1,5 @@
-﻿using Silk.NET.OpenGL;
+﻿using Sharpy.Logging;
+using Silk.NET.OpenGL;
 using Silk.NET.SDL;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace Sharpy.Rendering.OpenGL
                     return GLEnum.Float;
             }
 
-            Debug.Fail("Unknown shader attribute type");
+            SharpyAssert.Fail("Unknown shader attribute type");
             return GLEnum.None;
         }
 

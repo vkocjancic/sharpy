@@ -1,4 +1,5 @@
-﻿using Silk.NET.OpenGL;
+﻿using Sharpy.Logging;
+using Silk.NET.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +23,7 @@ namespace Sharpy.Rendering.OpenGL
 
         public override void Close(RenderableObjectBase obj)
         {
-            Debug.Assert(m_gl != null, "Render context is not set");
+            SharpyAssert.Assert(m_gl != null, "Render context is not set");
             obj.m_bufIndex?.Unbind();
             obj.m_bufVertex?.Unbind();
             m_gl.DeleteProgram(obj.m_unShaderProgramId);
@@ -30,7 +31,7 @@ namespace Sharpy.Rendering.OpenGL
 
         public override unsafe void Draw(RenderableObjectBase obj)
         {
-            Debug.Assert(m_gl != null, "Render context is not set");
+            SharpyAssert.Assert(m_gl != null, "Render context is not set");
             obj.m_bufVertex?.Bind();
             m_gl.UseProgram(obj.m_unShaderProgramId);
 

@@ -1,4 +1,5 @@
-﻿using Silk.NET.Maths;
+﻿using Sharpy.Logging;
+using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -103,10 +104,10 @@ namespace Sharpy.Rendering
         {
             InitInternal();
 
-            Debug.Assert(Indices != null && Indices.Length > 0, "Indices not set");
-            Debug.Assert(Vertices != null && Vertices.Length > 0, "Vertices not set");
-            Debug.Assert(FragmentShader != null, "Fragment shader not set");
-            Debug.Assert(VertexShader != null, "Vertex shader not set");
+            SharpyAssert.Assert(Indices != null && Indices.Length > 0, "Indices not set");
+            SharpyAssert.Assert(Vertices != null && Vertices.Length > 0, "Vertices not set");
+            SharpyAssert.Assert(FragmentShader != null, "Fragment shader not set");
+            SharpyAssert.Assert(VertexShader != null, "Vertex shader not set");
 
             var api = RenderApiBase.GetInstance();
             api.Init(this);
@@ -132,7 +133,7 @@ namespace Sharpy.Rendering
         {
             if (m_dictShaders.ContainsKey(t_typeShader))
             {
-                Debug.Fail($"Shader of type {t_typeShader} already exists");
+                SharpyAssert.Fail($"Shader of type {t_typeShader} already exists");
                 return;
             }
             m_dictShaders.Add(t_typeShader, shader);
@@ -144,7 +145,7 @@ namespace Sharpy.Rendering
         /// <param name="t_rgvec3dIndices">Indices to set</param>
         protected void SetIndices(uint[] t_rgvec3dIndices)
         {
-            Debug.Assert(t_rgvec3dIndices != null);
+            SharpyAssert.Assert(t_rgvec3dIndices != null, "Indices not set");
             Indices = new uint[t_rgvec3dIndices.Length];
             Array.Copy(t_rgvec3dIndices, Indices, t_rgvec3dIndices.Length);
         }
@@ -155,7 +156,7 @@ namespace Sharpy.Rendering
         /// <param name="t_rgvec3dVertices"></param>
         protected void SetVertices(float[] t_rgvec3dVertices)
         {
-            Debug.Assert(t_rgvec3dVertices != null);
+            SharpyAssert.Assert(t_rgvec3dVertices != null, "Vertices not set");
             Vertices = new float[t_rgvec3dVertices.Length];
             Array.Copy(t_rgvec3dVertices, Vertices, t_rgvec3dVertices.Length);
         }

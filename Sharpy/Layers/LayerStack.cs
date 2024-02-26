@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sharpy.Logging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -69,7 +70,7 @@ namespace Sharpy.Layers
         /// <param name="t_layer">Layer to push to stack</param>
         public void PushLayer(LayerBase t_layer)
         {
-            Debug.Assert(t_layer != null);
+            SharpyAssert.Assert(t_layer != null, "Layer is not set");
             m_stackLayers.Insert(m_nOverlayBegin, t_layer);
             m_nOverlayBegin++;
         }
@@ -80,7 +81,7 @@ namespace Sharpy.Layers
         /// <param name="t_layer">Overlay layer to push to stack</param>
         public void PushOverlay(LayerBase t_layer)
         {
-            Debug.Assert(t_layer != null);
+            SharpyAssert.Assert(t_layer != null, "Overlay is not set");
             m_stackLayers.Add(t_layer);
         }
 
@@ -104,7 +105,7 @@ namespace Sharpy.Layers
         public LayerBase PopOverlay()
         {
             int nOverlayEnd = m_stackLayers.Count() - 1;
-            Debug.Assert(m_nOverlayBegin <= nOverlayEnd);
+            SharpyAssert.Assert(m_nOverlayBegin <= nOverlayEnd, "Overlay stack is corrupted");
             LayerBase layer = m_stackLayers[nOverlayEnd];
             m_stackLayers.RemoveAt(nOverlayEnd);
             return layer;

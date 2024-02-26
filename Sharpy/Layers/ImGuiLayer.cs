@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using Sharpy.Events;
+using Sharpy.Logging;
 using Sharpy.Window;
 using Silk.NET.OpenGL.Extensions.ImGui;
 using System;
@@ -53,7 +54,7 @@ namespace Sharpy.Layers
 
         public override void OnInit(WindowBase window)
         {
-            Debug.Assert(window is WindowsWindow, "imGui only supports OpenGL");
+            SharpyAssert.Assert(window is WindowsWindow, "imGui only supports OpenGL");
             var winCtx = ((WindowsWindow)window).GetWindowContext();
             m_ctrlImGui = new ImGuiController(
                 winCtx.Item1,

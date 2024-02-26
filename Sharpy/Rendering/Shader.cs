@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sharpy.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace Sharpy.Rendering
         /// <returns>Shader object</returns>
         public static Shader CreateFromFile(string t_sShaderFilePath)
         {
-            Debug.Assert(!string.IsNullOrEmpty(t_sShaderFilePath), "Shader file path not specified");
+            SharpyAssert.Assert(!string.IsNullOrEmpty(t_sShaderFilePath), "Shader file path not specified");
             var shader = new Shader();
             try
             {
@@ -59,7 +60,7 @@ namespace Sharpy.Rendering
             }
             catch(Exception ex)
             {
-                Logging.Log.Error($"Could not load shader from path '{t_sShaderFilePath}'", ex);
+                Log.Error($"Could not load shader from path '{t_sShaderFilePath}'", ex);
             }
             return shader;
         }

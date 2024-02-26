@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sharpy.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -76,7 +77,7 @@ namespace Sharpy.Rendering
                     return (int)(m_unSize / sizeof(float));
             }
 
-            Debug.Fail("Unknown shader attribute data type");
+            SharpyAssert.Fail("Unknown shader attribute data type");
             return 0;
         }
 
@@ -103,7 +104,7 @@ namespace Sharpy.Rendering
                 case DataType.Float4:
                     return sizeof(float) * 4;
             }
-            Debug.Fail("Unknown shader attribute data type");
+            SharpyAssert.Fail("Unknown shader attribute data type");
             return 0;
         }
 
