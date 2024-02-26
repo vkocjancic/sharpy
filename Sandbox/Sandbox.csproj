@@ -22,4 +22,13 @@
     <ProjectReference Include="..\Sharpy\Sharpy.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\ExampleQuad\ExampleQuad.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\ExampleQuad\ExampleQuad.vert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

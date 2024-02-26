@@ -41,5 +41,30 @@ namespace Sharpy.Rendering
 
         #endregion
 
+
+        #region Factory methods
+
+        /// <summary>
+        /// Creates shader from source file
+        /// </summary>
+        /// <param name="t_sShaderFilePath">Shader source file path</param>
+        /// <returns>Shader object</returns>
+        public static Shader CreateFromFile(string t_sShaderFilePath)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(t_sShaderFilePath), "Shader file path not specified");
+            var shader = new Shader();
+            try
+            {
+                shader.m_sSource = File.ReadAllText(t_sShaderFilePath);
+            }
+            catch(Exception ex)
+            {
+                Logging.Log.Error($"Could not load shader from path '{t_sShaderFilePath}'", ex);
+            }
+            return shader;
+        }
+
+        #endregion
+
     }
 }

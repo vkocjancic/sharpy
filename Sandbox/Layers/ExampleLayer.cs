@@ -1,4 +1,4 @@
-﻿using Sandbox.Assets;
+﻿using Sandbox.Assets.ExampleQuad;
 using Sharpy.Events;
 using Sharpy.Layers;
 using Sharpy.Logging;
