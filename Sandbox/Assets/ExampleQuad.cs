@@ -12,7 +12,7 @@ namespace Sandbox.Assets
 
         #region RenderableObjectBase implmementation
 
-        public override void Init()
+        protected override void InitInternal()
         {
             float[] rgfVertices =
             {
@@ -21,12 +21,14 @@ namespace Sandbox.Assets
                 -0.5f, -0.5f, 0.0f, 0.2f, 0.8f, 0.8f, 1.0f,
                 -0.5f,  0.5f, 0.5f, 0.8f, 0.8f, 0.2f, 1.0f
             };
+            SetVertices(rgfVertices);
 
             uint[] rgunIndices =
             {
                 0u, 1u, 3u,
                 1u, 2u, 3u
             };
+            SetIndices(rgunIndices);
 
             var shdrVertex = new Shader();
             shdrVertex.AddAttributes(
@@ -51,6 +53,7 @@ void main()
     gl_Position = vec4(a_Position, 1.0);
 }
 ";
+            AppendShader(ShaderType.VertexShader, shdrVertex);
 
             var shdrFragment = new Shader();
             shdrFragment.m_sSource = @"
@@ -67,7 +70,7 @@ void main()
     color = v_Color;
 }
 ";
-            Init(rgfVertices, rgunIndices, shdrVertex, shdrFragment);
+            AppendShader(ShaderType.FragmentShader, shdrFragment);
         }
 
         #endregion

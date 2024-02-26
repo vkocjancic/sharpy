@@ -33,6 +33,8 @@ namespace Sharpy.Rendering
         /// </summary>
         internal VertexBufferBase? m_bufVertex;
 
+        protected Dictionary<ShaderType, Shader> m_dictShaders = new Dictionary<ShaderType, Shader>();
+
         #endregion
 
 
@@ -41,7 +43,13 @@ namespace Sharpy.Rendering
         /// <summary>
         /// Get fragment shader
         /// </summary>
-        public Sharpy.Rendering.Shader? FragmentShader { get; private set; }
+        public Sharpy.Rendering.Shader? FragmentShader 
+        { 
+            get
+            {
+                return m_dictShaders[ShaderType.FragmentShader];
+            }
+        }
 
         /// <summary>
         /// Get indices array
@@ -56,7 +64,23 @@ namespace Sharpy.Rendering
         /// <summary>
         /// Get vertex shader
         /// </summary>
-        public Sharpy.Rendering.Shader? VertexShader { get; private set; }
+        public Sharpy.Rendering.Shader? VertexShader
+        {
+            get
+            {
+                return m_dictShaders[ShaderType.VertexShader];
+            }
+        }
+
+        #endregion
+
+
+        #region Abstract methods
+
+        /// <summary>
+        /// Initializes concrete object
+        /// </summary>
+        protected abstract void InitInternal();
 
         #endregion
 
@@ -75,7 +99,18 @@ namespace Sharpy.Rendering
         /// <summary>
         /// Initializes the object
         /// </summary>
-        public abstract void Init();
+        public void Init()
+        {
+            InitInternal();
+
+            Debug.Assert(Indices != null && Indices.Length > 0, "Indices not set");
+            Debug.Assert(Vertices != null && Vertices.Length > 0, "Vertices not set");
+            Debug.Assert(FragmentShader != null, "Fragment shader not set");
+            Debug.Assert(VertexShader != null, "Vertex shader not set");
+
+            var api = RenderApiBase.GetInstance();
+            api.Init(this);
+        }
 
         public void Render()
         {
@@ -89,28 +124,25 @@ namespace Sharpy.Rendering
         #region Helper methods
 
         /// <summary>
-        /// Initialize renderable object
+        /// Appends shader
         /// </summary>
-        /// <param name="t_rgvec3dVertices">Object vertices</param>
-        /// <param name="t_rgvec3dIndices">Object indices</param>
-        /// <param name="t_shdrVertex">Vertex shader</param>
-        /// <param name="t_shdrFragment">Fragment shader</param>
-        protected void Init(float[] t_rgvec3dVertices, uint[] t_rgvec3dIndices, Sharpy.Rendering.Shader t_shdrVertex, Sharpy.Rendering.Shader t_shdrFragment)
+        /// <param name="t_typeShader">Type of shader</param>
+        /// <param name="shader">Shader to append</param>
+        protected void AppendShader(ShaderType t_typeShader, Shader shader)
         {
-            SetIndices(t_rgvec3dIndices);
-            SetVertices(t_rgvec3dVertices);
-            FragmentShader = t_shdrFragment;
-            VertexShader = t_shdrVertex;
-
-            var api = RenderApiBase.GetInstance();
-            api.Init(this);
+            if (m_dictShaders.ContainsKey(t_typeShader))
+            {
+                Debug.Fail($"Shader of type {t_typeShader} already exists");
+                return;
+            }
+            m_dictShaders.Add(t_typeShader, shader);
         }
 
         /// <summary>
         /// Set indices array for render initialization
         /// </summary>
         /// <param name="t_rgvec3dIndices">Indices to set</param>
-        private void SetIndices(uint[] t_rgvec3dIndices)
+        protected void SetIndices(uint[] t_rgvec3dIndices)
         {
             Debug.Assert(t_rgvec3dIndices != null);
             Indices = new uint[t_rgvec3dIndices.Length];
@@ -121,7 +153,7 @@ namespace Sharpy.Rendering
         /// Set vertices array for render initialization
         /// </summary>
         /// <param name="t_rgvec3dVertices"></param>
-        private void SetVertices(float[] t_rgvec3dVertices)
+        protected void SetVertices(float[] t_rgvec3dVertices)
         {
             Debug.Assert(t_rgvec3dVertices != null);
             Vertices = new float[t_rgvec3dVertices.Length];

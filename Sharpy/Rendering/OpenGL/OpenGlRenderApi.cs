@@ -54,7 +54,7 @@ namespace Sharpy.Rendering.OpenGL
             obj.m_bufIndex = new OpenGlIndexBuffer(m_gl, obj.Indices);
 
             // create vertex shader
-            uint unVertexShader = m_gl.CreateShader(ShaderType.VertexShader);
+            uint unVertexShader = m_gl.CreateShader(Silk.NET.OpenGL.ShaderType.VertexShader);
             m_gl.ShaderSource(unVertexShader, obj.VertexShader?.m_sSource);
             m_gl.CompileShader(unVertexShader);
 
@@ -66,7 +66,7 @@ namespace Sharpy.Rendering.OpenGL
             }
 
             // create fragment shader
-            uint unFragmentShader = m_gl.CreateShader(ShaderType.FragmentShader);
+            uint unFragmentShader = m_gl.CreateShader(Silk.NET.OpenGL.ShaderType.FragmentShader);
             m_gl.ShaderSource(unFragmentShader, obj.FragmentShader?.m_sSource);
             m_gl.CompileShader(unFragmentShader);
 
