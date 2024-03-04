@@ -34,7 +34,7 @@ namespace Sandbox.Layers
 
         public override void OnEvent(EventArgsBase t_evtArgs)
         {
-            Log.Info("APP: {0}", t_evtArgs);
+            
         }
 
         public override void OnInit(WindowBase window)

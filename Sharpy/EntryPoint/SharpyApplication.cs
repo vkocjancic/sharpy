@@ -76,8 +76,6 @@ namespace Sharpy.EntryPoint
         /// <param name="t_evtArgs">Event details</param>
         private void OnEventDispatcherEvent(object t_oSender, EventArgsBase t_evtArgs)
         {
-            Log.Debug("{0}", t_evtArgs);
-
             if (t_evtArgs is WindowInitEventArgs)
             {
                 for (int i = 0; i < m_stackLayers.Count(); i++)
