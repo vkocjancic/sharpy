@@ -24,6 +24,7 @@ namespace Sharpy.Rendering.OpenGL
         public override void Close(RenderableObjectBase obj)
         {
             SharpyAssert.Assert(m_gl != null, "Render context is not set");
+            obj.m_bufTexture?.Unbind();
             obj.m_bufIndex?.Unbind();
             obj.m_bufVertex?.Unbind();
             m_gl.DeleteProgram(obj.m_unShaderProgramId);
@@ -34,7 +35,8 @@ namespace Sharpy.Rendering.OpenGL
             SharpyAssert.Assert(m_gl != null, "Render context is not set");
             obj.m_bufVertex?.Bind();
             m_gl.UseProgram(obj.m_unShaderProgramId);
-
+            
+            obj.m_bufTexture?.Bind();
             obj.m_bufIndex?.Bind();
         }
 
@@ -96,7 +98,13 @@ namespace Sharpy.Rendering.OpenGL
             m_gl.DetachShader(obj.m_unShaderProgramId, unFragmentShader);
             m_gl.DeleteShader(unVertexShader);
             m_gl.DeleteShader(unFragmentShader);
-                       
+
+            // set up textures
+
+            if (null != obj.m_texture)
+            {
+                obj.m_bufTexture = new OpenGlTextureBuffer(m_gl, obj);
+            }
         } 
 
         #endregion

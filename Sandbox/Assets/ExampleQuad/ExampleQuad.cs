@@ -16,10 +16,11 @@ namespace Sandbox.Assets.ExampleQuad
         {
             float[] rgfVertices =
             {
-                 0.5f,  0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-                 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-                -0.5f, -0.5f, 0.0f, 0.2f, 0.8f, 0.8f, 1.0f,
-                -0.5f,  0.5f, 0.5f, 0.8f, 0.8f, 0.2f, 1.0f
+            //   a_Position-------  a_Color---------------  a_txCoords
+                 0.5f,  0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f, 1.0f, 1.0f,
+                 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f, 1.0f, 0.0f,
+                -0.5f, -0.5f, 0.0f, 0.2f, 0.8f, 0.8f, 1.0f, 0.0f, 0.0f,
+                -0.5f,  0.5f, 0.5f, 0.8f, 0.8f, 0.2f, 1.0f, 0.0f, 1.0f
             };
             SetVertices(rgfVertices);
 
@@ -33,12 +34,16 @@ namespace Sandbox.Assets.ExampleQuad
             var shdrVertex = Shader.CreateFromFile(@"Assets\ExampleQuad\ExampleQuad.vert");
             shdrVertex.AddAttributes(
                 new ShaderAttribute(ShaderAttribute.DataType.Float3, "a_Position"),
-                new ShaderAttribute(ShaderAttribute.DataType.Float4, "a_Color")
+                new ShaderAttribute(ShaderAttribute.DataType.Float4, "a_Color"),
+                new ShaderAttribute(ShaderAttribute.DataType.Float2, "a_txCoords")
             );
             AppendShader(ShaderType.VertexShader, shdrVertex);
 
             var shdrFragment = Shader.CreateFromFile(@"Assets\ExampleQuad\ExampleQuad.frag");
             AppendShader(ShaderType.FragmentShader, shdrFragment);
+
+            var tx = Texture.CreateFromFile(@"Assets\ExampleQuad\ExampleQuadTx.png");
+            AppendTexture(tx);
         }
 
         #endregion

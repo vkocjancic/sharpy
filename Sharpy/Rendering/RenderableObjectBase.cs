@@ -25,16 +25,29 @@ namespace Sharpy.Rendering
         internal IndexBufferBase? m_bufIndex;
 
         /// <summary>
-        /// Shader program id
+        /// Stores texture buffer
         /// </summary>
-        public uint m_unShaderProgramId;
+        internal TextureBufferBase? m_bufTexture;
 
         /// <summary>
         /// Stores vertex buffer
         /// </summary>
         internal VertexBufferBase? m_bufVertex;
 
+        /// <summary>
+        /// Shader program id
+        /// </summary>
+        public uint m_unShaderProgramId;
+
+        /// <summary>
+        /// Stores all shaders according to type
+        /// </summary>
         protected Dictionary<ShaderType, Shader> m_dictShaders = new Dictionary<ShaderType, Shader>();
+
+        /// <summary>
+        /// Stores all textures
+        /// </summary>
+        public Texture? m_texture;
 
         #endregion
 
@@ -128,15 +141,24 @@ namespace Sharpy.Rendering
         /// Appends shader
         /// </summary>
         /// <param name="t_typeShader">Type of shader</param>
-        /// <param name="shader">Shader to append</param>
-        protected void AppendShader(ShaderType t_typeShader, Shader shader)
+        /// <param name="t_shader">Shader to append</param>
+        protected void AppendShader(ShaderType t_typeShader, Shader t_shader)
         {
             if (m_dictShaders.ContainsKey(t_typeShader))
             {
                 SharpyAssert.Fail($"Shader of type {t_typeShader} already exists");
                 return;
             }
-            m_dictShaders.Add(t_typeShader, shader);
+            m_dictShaders.Add(t_typeShader, t_shader);
+        }
+
+        /// <summary>
+        /// Appends texture
+        /// </summary>
+        /// <param name="t_texture">Texture to append</param>
+        protected void AppendTexture(Texture t_texture)
+        {
+            m_texture = t_texture;
         }
 
         /// <summary>

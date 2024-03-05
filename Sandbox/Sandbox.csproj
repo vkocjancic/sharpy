@@ -29,6 +29,9 @@
     <None Update="Assets\ExampleQuad\ExampleQuad.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Assets\ExampleQuad\ExampleQuadTx.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

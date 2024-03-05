@@ -20,6 +20,7 @@
   <ItemGroup>
     <PackageReference Include="Silk.NET" Version="2.20.0" />
     <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.20.0" />
+    <PackageReference Include="StbImageSharp" Version="2.27.13" />
   </ItemGroup>
 
 </Project>
