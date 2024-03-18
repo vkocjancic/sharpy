@@ -100,10 +100,14 @@ namespace Sharpy.Rendering.OpenGL
             m_gl.DeleteShader(unFragmentShader);
 
             // set up textures
-
             if (null != obj.m_texture)
             {
-                obj.m_bufTexture = new OpenGlTextureBuffer(m_gl, obj);
+                obj.m_bufTexture = new OpenGlTextureBuffer(m_gl, obj.m_texture);
+                foreach (ShaderUniform uniform in obj.FragmentShader?.m_lstUniforms ?? new List<ShaderUniform>())
+                {
+                    int nLocation = m_gl.GetUniformLocation(obj.m_unShaderProgramId, uniform.m_sName);
+                    m_gl.Uniform1(nLocation, (int)uniform.m_objValue);
+                }
             }
         } 
 

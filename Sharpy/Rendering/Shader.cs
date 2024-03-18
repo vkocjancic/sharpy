@@ -14,6 +14,7 @@ namespace Sharpy.Rendering
         #region Fields
 
         public ShaderAttributeList m_lstAttributes = new ShaderAttributeList();
+        public List<ShaderUniform> m_lstUniforms = new List<ShaderUniform>();
 
         public string m_sSource = "";
 
@@ -22,15 +23,6 @@ namespace Sharpy.Rendering
 
         #region Public methods
 
-        ///// <summary>
-        ///// Adds attribute to shader
-        ///// </summary>
-        ///// <param name="t_attr">Attribute to add</param>
-        //public void AddAttribute(ShaderAttribute t_attr)
-        //{
-        //    m_rgAttributes.Add(t_attr);
-        //}
-
         /// <summary>
         /// Adds attributes to shader
         /// </summary>
@@ -38,6 +30,15 @@ namespace Sharpy.Rendering
         public void AddAttributes(params ShaderAttribute[] t_rgAttributes)
         {
             m_lstAttributes.AddRange(t_rgAttributes);
+        }
+
+        /// <summary>
+        /// Adds uniforms to shader
+        /// </summary>
+        /// <param name="t_rgUniforms">Uniforms to add</param>
+        public void AddUniforms(params ShaderUniform[] t_rgUniforms)
+        {
+            m_lstUniforms.AddRange(t_rgUniforms);
         }
 
         #endregion

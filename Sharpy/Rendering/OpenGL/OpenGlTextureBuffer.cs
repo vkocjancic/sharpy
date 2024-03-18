@@ -32,17 +32,14 @@ namespace Sharpy.Rendering.OpenGL
         /// </summary>
         /// <param name="t_gl">Render context</param>
         /// <param name="t_texture">Texture to buffer</param>
-        /// <param name="t_unShaderProgramId">Shader program</param>
-        public unsafe OpenGlTextureBuffer(GL t_gl, RenderableObjectBase t_obj) : base()
+        public unsafe OpenGlTextureBuffer(GL t_gl, Texture t_texture) : base()
         {
-            SharpyAssert.Assert(t_obj.m_texture != null, "Texture is not set");
-
             m_gl = t_gl;
             m_unBufferId = m_gl.GenTexture();
             m_gl.ActiveTexture(TextureUnit.Texture0);
             m_gl.BindTexture(TextureTarget.Texture2D, m_unBufferId);
 
-            ImageResult imgTexture = ImageResult.FromMemory(t_obj.m_texture.m_rgbData, ColorComponents.RedGreenBlueAlpha);
+            ImageResult imgTexture = ImageResult.FromMemory(t_texture.m_rgbData, ColorComponents.RedGreenBlueAlpha);
             fixed(byte* pbyteData = imgTexture.Data)
             {
                 m_gl.TexImage2D(
@@ -66,10 +63,6 @@ namespace Sharpy.Rendering.OpenGL
 
             m_gl.GenerateMipmap(TextureTarget.Texture2D);
             m_gl.BindTexture(TextureTarget.Texture2D, 0);
-
-            // TODO: there is got to be a better was than this!
-            int nLocation = m_gl.GetUniformLocation(t_obj.m_unShaderProgramId, "u_Texture");
-            m_gl.Uniform1(nLocation, 0);
 
             m_gl.Enable(EnableCap.Blend);
             m_gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);

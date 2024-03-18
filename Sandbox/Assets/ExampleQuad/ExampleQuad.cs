@@ -1,4 +1,5 @@
 ﻿using Sharpy.Rendering;
+using Silk.NET.Vulkan;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,9 @@ namespace Sandbox.Assets.ExampleQuad
             AppendShader(ShaderType.VertexShader, shdrVertex);
 
             var shdrFragment = Shader.CreateFromFile(@"Assets\ExampleQuad\ExampleQuad.frag");
+            shdrFragment.AddUniforms(
+                new ShaderUniform("u_Texture", 0)
+            );
             AppendShader(ShaderType.FragmentShader, shdrFragment);
 
             var tx = Texture.CreateFromFile(@"Assets\ExampleQuad\ExampleQuadTx.png");
